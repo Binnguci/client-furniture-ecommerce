@@ -1,11 +1,26 @@
 'use client';
 import React from "react";
-import {Button, Form, Grid, Input, theme, Typography as AntTypography} from "antd";
+import {
+    Button,
+    Form,
+    Grid,
+    Input,
+    notification,
+    type NotificationArgsProps,
+    theme,
+    Typography as AntTypography
+} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
 import {FormSignUp} from "../types/formSignUp.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {FormSignIn} from "../types/formSignIn.ts";
+import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
+import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
+
+type NotificationPlacement = NotificationArgsProps['placement'];
 
 const {useToken} = theme;
 const {useBreakpoint} = Grid;
@@ -15,6 +30,22 @@ export default function SignIn() {
     const {token} = useToken();
     const screens = useBreakpoint();
     const navigate = useNavigate();
+    const [api, contextHolder] = notification.useNotification();
+
+    const openNotificationWithIconSuccess = () => {
+        api.success({
+            message: 'Yêu cầu đăng ký thành công',
+            description: "Vui lòng kiểm tra email và nhập mã OTP để kích hoạt tài khoản",
+        });
+    };
+    const openNotificationWithIconError = (placement: NotificationPlacement, error: string) => {
+        api.error({
+            message: `Đăng ký thất bại`,
+            description:
+            error,
+            placement,
+        });
+    };
 
     const initialValues: FormSignUp = {
         username: "",
@@ -37,11 +68,18 @@ export default function SignIn() {
         try {
             const response = await http.post("/auth/login", data);
             console.log('Data sent successfully:', response.data);
+            openNotificationWithIconSuccess()
             setTimeout(() => {
-                navigate("/home");
+                navigate("/");
             }, 1000);
-        } catch (error) {
-            console.error('Error sending data:', error);
+        } catch (error: unknown) {
+            let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
+
+            if (axios.isAxiosError(error)) {
+                errorMessage = error.response?.data?.message || 'Tên đăng nhập hoặc mật khẩu không đúng!';
+            }
+            openNotificationWithIconError('bottom', errorMessage);
+            console.error('Error sending data:', errorMessage);
         }
     };
     const onFinish = async (values: FormSignUp) => {
@@ -52,7 +90,8 @@ export default function SignIn() {
     return (
         <section
             className={`flex items-center justify-center ${screens.sm ? "h-screen" : "h-auto"} bg-${token.colorBgContainer} p-8`}>
-            <div className="mx-auto w-[380px] bg-gray-100 shadow-lg rounded-lg p-6">
+            {contextHolder}
+            <div className="mx-auto w-[380px]   p-6">
                 <div className="text-center mb-8">
                     <Title level={2} className={`text-${screens.md ? "2xl" : "xl"}`}>Đăng nhập</Title>
                 </div>
@@ -85,7 +124,7 @@ export default function SignIn() {
                     >
                         <Input.Password
                             prefix={<LockOutlined/>}
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                             onChange={handleChange} value={form.password}
                         />
                     </Form.Item>
@@ -104,6 +143,23 @@ export default function SignIn() {
                         </div>
                     </Form.Item>
                 </Form>
+                <div className="flex flex-col justify-center items-center gap-2 mt-4">
+                    <Button
+                        icon={<FontAwesomeIcon icon={faFacebook}/>}
+                        className="bg-blue-600 text-white w-full"
+                        onClick={() => window.location.href = 'URL_Facebook_Login'}
+                    >
+                        Đăng nhập bằng Facebook
+                    </Button>
+                    <Button
+                        icon={<FontAwesomeIcon icon={faGoogle}/>}  // Thêm icon Google
+                        className="bg-red-600 text-white w-full"
+                        onClick={() => window.location.href = 'http://localhost:8085/oauth2/authorization/google'}
+                    >
+                        Đăng nhập bằng Google
+                    </Button>
+
+                </div>
             </div>
         </section>
     );

@@ -1,16 +1,22 @@
 'use client';
 import React from "react";
+import type {NotificationArgsProps} from 'antd';
 import {Button, Form, Grid, Input, notification, theme, Typography as AntTypography} from "antd";
 
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
 import {FormSignUp} from "../types/formSignUp.ts";
 import {Link, useNavigate} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
+import axios from "axios";
+import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
+
+type NotificationPlacement = NotificationArgsProps['placement'];
 
 const {useToken} = theme;
 const {useBreakpoint} = Grid;
 const {Text, Title} = AntTypography;
-type NotificationType = 'success' | 'error';
 
 export default function Register() {
     const {token} = useToken();
@@ -27,21 +33,19 @@ export default function Register() {
 
     const [form, setForm] = React.useState<FormSignUp>(initialValues);
 
-    const openNotificationWithIcon = (type: NotificationType) => {
-        switch (type) {
-            case 'success':
-                api.success({
-                    message: 'Yêu cầu đăng ký thành công',
-                    description: "Vui lòng kiểm tra email và nhập mã OTP để kích hoạt tài khoản",
-                });
-                break;
-            case 'error':
-                api.error({
-                    message: 'Yêu cầu đăng ký thất bại',
-                    description: "Vui lòng kiểm tra lại đường truyền internet",
-                });
-                break;
-        }
+    const openNotificationWithIcon = () => {
+        api.success({
+            message: 'Yêu cầu đăng ký thành công',
+            description: "Vui lòng kiểm tra email và nhập mã OTP để kích hoạt tài khoản",
+        });
+    };
+    const openNotificationWithIconError = (placement: NotificationPlacement, error: string) => {
+        api.error({
+            message: `Đăng nhập thất bại`,
+            description:
+            error,
+            placement,
+        });
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,15 +60,23 @@ export default function Register() {
         try {
             const response = await http.post("/auth/sign-up", data);
             console.log('Data sent successfully:', response.data);
-            openNotificationWithIcon('success');
+            openNotificationWithIcon();
+
             setTimeout(() => {
                 navigate("/verify-otp", {state: {email: data.email}});
             }, 1000);
-        } catch (error) {
-            openNotificationWithIcon('error');
-            console.error('Error sending data:', error);
+
+        } catch (error: unknown) {
+            let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
+
+            if (axios.isAxiosError(error)) {
+                errorMessage = error.response?.data?.message || 'Lỗi không xác định từ máy chủ!';
+            }
+            openNotificationWithIconError('bottom', errorMessage);
+            console.error('Error sending data:', errorMessage);
         }
     };
+
     const onFinish = async (values: FormSignUp) => {
         console.log("Received values of form: ", values);
         await sendData(values);
@@ -74,9 +86,7 @@ export default function Register() {
         <section
             className={`flex items-center justify-center ${screens.sm ? "h-screen" : "h-auto"} bg-${token.colorBgContainer} p-8`}>
             {contextHolder}
-
-            <div className="mx-auto w-[380px] bg-gray-100 shadow-lg rounded-lg p-6">
-
+            <div className="mx-auto w-[380px] p-6">
                 <div className="text-center mb-8">
                     <Title level={2} className={`text-${screens.md ? "2xl" : "xl"}`}>Đăng ký</Title>
                 </div>
@@ -114,14 +124,9 @@ export default function Register() {
                         name="email"
                         rules={[
                             {
-                                type: "email",
                                 required: true,
                                 message: "Vui lòng điền địa chỉ email!",
                             },
-                            {
-                                pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                                message: "Email không hợp lệ"
-                            }
                         ]}
                     >
                         <Input prefix={<MailOutlined/>} placeholder="Email" onChange={handleChange} value={form.email}/>
@@ -185,6 +190,23 @@ export default function Register() {
                         </div>
                     </Form.Item>
                 </Form>
+                <div className="flex flex-col justify-center items-center gap-2 mt-4">
+                    <Button
+                        icon={<FontAwesomeIcon icon={faFacebook} />}
+                        className="bg-blue-600 text-white w-full"
+                        onClick={() => window.location.href = 'URL_Facebook_Login'}
+                    >
+                        Đăng nhập bằng Facebook
+                    </Button>
+                    <Button
+                        icon={<FontAwesomeIcon icon={faGoogle}/>}  // Thêm icon Google
+                        className="bg-red-600 text-white w-full"
+                        onClick={() => window.location.href = 'http://localhost:8085/oauth2/authorization/google'}
+                    >
+                        Đăng nhập bằng Google
+                    </Button>
+
+                </div>
             </div>
         </section>
     );

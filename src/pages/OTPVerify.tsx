@@ -1,11 +1,10 @@
 'use client'
 import React, {useRef} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, notification} from "antd";
+import {Button, notification, type NotificationArgsProps} from "antd";
 import http from "../utils/http.ts";
 
-type NotificationType = 'success' | 'error';
-
+type NotificationPlacement = NotificationArgsProps['placement'];
 export default function OTPVerify() {
     const inputs = useRef<(HTMLInputElement | null)[]>([]);
     const navigate = useNavigate();
@@ -39,6 +38,20 @@ export default function OTPVerify() {
         e.target.select();
     };
 
+    const openNotificationWithIcon = () => {
+        api.success({
+            message: 'Xác thực thành công',
+            description: "Đăng nhập vào tài khoản để trải nghiệm",
+        });
+    };
+    const openNotificationWithIconError = (placement: NotificationPlacement) => {
+        api.error({
+            message: `Đăng nhập thất bại`,
+            description: "Vui lòng kiểm tra lại mã OTP",
+            placement,
+        });
+    };
+
     const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>, index: number) => {
         e.preventDefault();
         const text = e.clipboardData.getData('text');
@@ -53,22 +66,6 @@ export default function OTPVerify() {
         }
     };
 
-    const openNotificationWithIcon = (type: NotificationType) => {
-        switch (type) {
-            case 'success':
-                api.success({
-                    message: 'Xác thực thành công',
-                    description: "Đăng nhập vào tài khoản để trải nghiệm",
-                });
-                break;
-            case 'error':
-                api.error({
-                    message: 'Xác thực OTP thất bại',
-                    description: "Vui lòng kiểm tra lại mã OTP",
-                });
-                break;
-        }
-    }
     const resendOTP = async () => {
         try {
             const response = await http.post("/auth/resend-otp", {
@@ -89,13 +86,13 @@ export default function OTPVerify() {
                 email: email,
                 otp: otpCode
             });
-            openNotificationWithIcon('success');
+            openNotificationWithIcon();
             console.log(response.data);
             setTimeout(() => {
                 navigate("/sign-in")
             },)
         } catch (error) {
-            openNotificationWithIcon('error');
+            openNotificationWithIconError('bottom')
             console.error("Error during OTP verification", error);
 
         }
@@ -106,7 +103,7 @@ export default function OTPVerify() {
             {contextHolder}
             <div className="w-full max-w-6xl mx-auto px-4 md:px-6 py-24">
                 <div className="flex justify-center">
-                    <div className="max-w-md mx-auto text-center bg-white px-4 sm:px-8 py-10 rounded-xl shadow">
+                    <div className="max-w-md mx-auto text-center px-4 sm:px-8 py-10">
                         <header className="mb-8">
                             <h1 className="text-2xl font-bold mb-1">Xác thực tài khoản</h1>
                             <p className="text-[15px] text-slate-500">Nhập mã OTP mà chúng tôi đã gửi về email của
