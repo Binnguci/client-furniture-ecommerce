@@ -4,6 +4,8 @@ import Register from "./pages/Register.tsx";
 import SignIn from "./pages/SignIn.tsx";
 import OTPVerify from "./pages/OTPVerify.tsx";
 import Home from "./pages/Home.tsx";
+import MainLayout from "./layout/MainLayout.tsx";
+import {Personal} from "./pages/Personal.tsx";
 
 function App() {
 
@@ -11,7 +13,10 @@ function App() {
         <BrowserRouter>
             <div className="App">
                 <Routes>
-                    <Route path={"/"} element={<Home/>}/>
+                    <Route path="/" element={<MainLayout />}>
+                        <Route index element={<Home />} />
+                        <Route path={"/user-info"} element={<Personal/>}/>
+                    </Route>
                     <Route path={"/sign-up"} element={<Register/>}/>
                     <Route path={"/verify-otp"} element={<OTPVerify/>}/>
                     <Route path={"/sign-in"} element={<SignIn/>}/>

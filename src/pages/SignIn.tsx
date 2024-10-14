@@ -128,10 +128,11 @@ export default function SignIn() {
                             onChange={handleChange} value={form.password}
                         />
                     </Form.Item>
-                    <Form.Item style={{marginBottom: "0px"}}>
+                    <Form.Item style={{marginBottom: "0px"}} >
                         <Button
                             variant={"solid"}
-                            color={"default"}
+                            // color={"default"}
+                            className="bg-black hover:bg-[#FFA726] text-white w-full"
                             block
                             htmlType="submit"
                         >

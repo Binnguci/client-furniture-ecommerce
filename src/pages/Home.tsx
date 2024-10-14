@@ -1,12 +1,17 @@
-import {Link} from "react-router-dom";
+import HeroSection from "../components/HeroBar.tsx";
+import WhyChooseUs from "../components/WhyChooseUs.tsx";
+import ExploreProduct from "../components/ExploreInHomePage.tsx";
+import ExploreBlog from "../components/ExploreBlog.tsx";
 
 function Home() {
+
     return (
-        <div className={"gap-2 flex"}>
-            <Link to={"/sign-up"}>đăng ký</Link>
-            <Link to={"/sign-in"}>đăng nhập</Link>
-            <Link to={"/verify-otp"}>OTP</Link>
-        </div>
+        <>
+            <HeroSection/>
+            <WhyChooseUs/>
+            <ExploreProduct/>
+            <ExploreBlog/>
+        </>
     );
 }
 

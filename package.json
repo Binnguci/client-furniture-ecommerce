@@ -20,7 +20,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
-    "framer-motion": "^11.11.7",
+    "framer-motion": "^11.11.8",
     "i18next": "^23.15.1",
     "lucide-react": "^0.447.0",
     "react": "^18.3.1",
@@ -33,9 +33,11 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@ant-design/pro-components": "^2.7.19",
     "@eslint/js": "^9.9.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/swiper": "^6.0.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
@@ -43,6 +45,7 @@
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "postcss": "^8.4.47",
+    "swiper": "^11.1.14",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
