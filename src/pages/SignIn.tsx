@@ -1,15 +1,6 @@
 'use client';
 import React from "react";
-import {
-    Button,
-    Form,
-    Grid,
-    Input,
-    notification,
-    type NotificationArgsProps,
-    theme,
-    Typography as AntTypography
-} from "antd";
+import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
 import {FormSignUp} from "../types/formSignUp.ts";
@@ -22,12 +13,10 @@ import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
-const {useToken} = theme;
 const {useBreakpoint} = Grid;
 const {Text, Title} = AntTypography;
 
 export default function SignIn() {
-    const {token} = useToken();
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
@@ -68,6 +57,8 @@ export default function SignIn() {
         try {
             const response = await http.post("/auth/login", data);
             console.log('Data sent successfully:', response.data);
+            const {token} = response.data.result;
+            localStorage.setItem('token', token);
             openNotificationWithIconSuccess()
             setTimeout(() => {
                 navigate("/");
@@ -89,7 +80,7 @@ export default function SignIn() {
 
     return (
         <section
-            className={`flex items-center justify-center ${screens.sm ? "h-screen" : "h-auto"} bg-${token.colorBgContainer} p-8`}>
+            className={`flex items-center justify-center ${screens.sm ? "h-screen" : "h-auto"} p-8`}>
             {contextHolder}
             <div className="mx-auto w-[380px]   p-6">
                 <div className="text-center mb-8">
@@ -128,7 +119,7 @@ export default function SignIn() {
                             onChange={handleChange} value={form.password}
                         />
                     </Form.Item>
-                    <Form.Item style={{marginBottom: "0px"}} >
+                    <Form.Item style={{marginBottom: "0px"}}>
                         <Button
                             variant={"solid"}
                             // color={"default"}
@@ -139,7 +130,7 @@ export default function SignIn() {
                             Đăng nhập
                         </Button>
                         <div className="mt-4 text-center">
-                            <Text className={`text-${token.colorTextSecondary}`}>Bạn chưa có tài khoản?</Text>{" "}
+                            <Text>Bạn chưa có tài khoản?</Text>{" "}
                             <Link to="/sign-up" className={"text-black font-bold hover:text-black"}>Tạo tài khoản</Link>
                         </div>
                     </Form.Item>

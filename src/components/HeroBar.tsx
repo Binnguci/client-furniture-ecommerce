@@ -8,11 +8,10 @@ function HeroBar() {
                 <div className="flex flex-wrap justify-between items-center">
                     <div className="lg:w-5/12 w-full mb-8 lg:mb-0">
                         <div className="intro-excerpt">
-                            <h1 className="text-4xl font-bold">Modern Interior <span
-                                className="block text-[#FFA726]">Design Studio</span></h1>
-                            <p className="mb-4 text-[#FFA726]">Donec vitae odio quis nisl dapibus malesuada. Nullam
-                                ac
-                                aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+                            <h1 className="text-4xl font-bold">Nội thất đẳng cấp<span
+                                className="block text-[#FFA726]">Tôn vinh không gian sống</span></h1>
+                            <p className="mb-4 text-[#FFA726]">Mang đến sự tinh tế và sang trọng trong từng chi tiết,
+                                chúng tôi tự hào là lựa chọn hàng đầu cho không gian sống cao cấp tại Việt Nam</p>
                             <p>
                                 <a href="#"
                                    className="btn bg-black text-[#FFA726] rounded px-6 py-2  mr-4 hover:bg-[#FFA726] hover:text-black font-bold">Xem

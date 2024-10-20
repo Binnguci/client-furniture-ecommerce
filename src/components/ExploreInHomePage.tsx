@@ -26,28 +26,25 @@ function ExploreInHomePage() {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full lg:w-5/12 pl-0 lg:pl-5">
-                        <h2 className="section-title mb-4 text-2xl text-[#FFA726] font-bold">We Help You Make Modern
-                            Interior
-                            Design</h2>
-                        <p className="mb-4 ">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis
-                            nisl dapibus malesuada. Nullam
-                            ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque
-                            habitant
-                            morbi tristique senectus et netus et malesuada</p>
+                    <div className="w-full lg:w-5/12 pl-0 lg:pl-5 ml-5">
+                        <h2 className="section-title mb-4 text-2xl text-[#FFA726] font-bold">Chúng tôi giúp bạn tạo nên
+                            không gian nội thất hiện đại</h2>
+                        <p className="mb-4 ">Khám phá sự khác biệt với phong cách thiết kế nội thất tinh tế và hiện đại.
+                            Với đội ngũ chuyên gia giàu kinh nghiệm, chúng tôi mang đến những giải pháp độc đáo và phù
+                            hợp với từng không gian sống, giúp bạn tận hưởng cuộc sống đẳng cấp.</p>
 
                         <ul className="list-none w-full my-4">
-                            <li className="inline-block w-[calc(50%-20px)] mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Donec
-                                vitae odio quis nisl dapibus malesuada
+                            <li className="inline-block w-[calc(50%-20px)] mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Thiết
+                                kế sáng tạo, mang đậm cá tính
                             </li>
-                            <li className="inline-block w-[calc(50%-20px)] mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Donec
-                                vitae odio quis nisl dapibus malesuada
+                            <li className="inline-block w-[calc(50%-20px)] mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Chất
+                                liệu cao cấp, bền bỉ theo thời gian
                             </li>
-                            <li className="inline-block w-[calc(50%-20px)]  mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Donec
-                                vitae odio quis nisl dapibus malesuada
+                            <li className="inline-block w-[calc(50%-20px)]  mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Tối
+                                ưu hóa không gian sống tiện nghi
                             </li>
-                            <li className="inline-block w-[calc(50%-20px)] mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Donec
-                                vitae odio quis nisl dapibus malesuada
+                            <li className="inline-block w-[calc(50%-20px)] mb-3 leading-6 relative pl-5 before:content-[''] before:w-2 before:h-2 before:rounded-full before:border-2 before:border-[#3b5d50] before:absolute before:left-0 before:top-2">Dịch
+                                vụ tư vấn chuyên nghiệp, tận tâm
                             </li>
                         </ul>
                         <p><a href="#"
