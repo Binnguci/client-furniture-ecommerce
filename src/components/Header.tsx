@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Logo from "./logo.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -42,6 +42,32 @@ const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+    const header = useRef(null);
+
+
+    const handleScroll = () => {
+        if (typeof window !== 'undefined') {
+            if (window.scrollY > lastScrollY) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+            setLastScrollY(window.scrollY);
+        }
+    };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.addEventListener('scroll', handleScroll);
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener('scroll', handleScroll);
+            }
+        };
+    }, [lastScrollY]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -49,19 +75,20 @@ const Header = () => {
     }, []);
 
 
+
     const handleToggleMenu = () => {
         setMenuOpen(!isMenuOpen);
     };
 
-    const handleOnClick = async (option: string) =>{
-        if (option === "Đăng xuất"){
+    const handleOnClick = async (option: string) => {
+        if (option === "Đăng xuất") {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
                     console.error('Không tìm thấy token trong localStorage');
                     return;
                 }
-                const response = await http.post("/auth/logout", { token });
+                const response = await http.post("/auth/logout", {token});
                 localStorage.removeItem('token');
                 console.log('Đăng xuất thành công:', response.data);
                 setTimeout(() => {
@@ -79,7 +106,11 @@ const Header = () => {
 
     return (
         <header
-            className="flex  py-4 px-4 sm:px-10 bg-black font-[sans-serif] min-h-[70px] tracking-wide relative z-50">
+            ref={header}
+            className={`flex header py-4 px-4 sm:px-10 bg-black font-[sans-serif] min-h-[70px] tracking-wide z-50 fixed w-full top-0  transition-[transform,opacity] duration-300 ease-in-out transform ${
+                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[-100%] opacity-0 ' 
+            }`}
+        >
             <div className="flex flex-wrap items-center justify-between gap-4 w-full">
                 <a
                     href="javascript:void(0)"
