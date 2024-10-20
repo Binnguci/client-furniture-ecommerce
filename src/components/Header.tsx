@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Logo from "./logo.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartShopping, faHeart, faUser} from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +10,8 @@ import {ChevronDownIcon} from "lucide-react";
 import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons/faArrowRightFromBracket";
 import {faCircleInfo} from "@fortawesome/free-solid-svg-icons/faCircleInfo";
 import {faBagShopping} from "@fortawesome/free-solid-svg-icons/faBagShopping";
+import http from "../utils/http.ts";
+import axios from "axios";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -39,6 +41,7 @@ const accounts = [
 const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -49,6 +52,30 @@ const Header = () => {
     const handleToggleMenu = () => {
         setMenuOpen(!isMenuOpen);
     };
+
+    const handleOnClick = async (option: string) =>{
+        if (option === "Đăng xuất"){
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    console.error('Không tìm thấy token trong localStorage');
+                    return;
+                }
+                const response = await http.post("/auth/logout", { token });
+                localStorage.removeItem('token');
+                console.log('Đăng xuất thành công:', response.data);
+                setTimeout(() => {
+                    navigate("/");
+                }, 100);
+            } catch (error: unknown) {
+                let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
+                if (axios.isAxiosError(error)) {
+                    errorMessage = error.response?.data?.message || 'Lỗi không xác định từ máy chủ!';
+                }
+                console.error('Error sending data:', errorMessage);
+            }
+        }
+    }
 
     return (
         <header
@@ -102,10 +129,6 @@ const Header = () => {
 
                         </li>
                         <li className="max-lg:border-b max-lg:py-3 px-3">
-                            {/*<Link to="/brands"*/}
-                            {/*      className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">*/}
-                            {/*    Thương hiệu*/}
-                            {/*</Link>*/}
                             <PopoverGroup className="hidden lg:flex lg:gap-x-12">
                                 <Popover className="relative">
                                     <PopoverButton
@@ -180,6 +203,7 @@ const Header = () => {
                                                 </div>
                                                 <div className="flex-auto">
                                                     <Link to={item.href}
+                                                          onClick={() => handleOnClick(item.option)}
                                                           className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">
                                                         {item.option}
                                                         <span className="absolute inset-0"/>
