@@ -7,6 +7,9 @@ import {Tooltip, tooltipClasses, TooltipProps} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import {Popover, PopoverButton, PopoverGroup, PopoverPanel} from "@headlessui/react";
 import {ChevronDownIcon} from "lucide-react";
+import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons/faArrowRightFromBracket";
+import {faCircleInfo} from "@fortawesome/free-solid-svg-icons/faCircleInfo";
+import {faBagShopping} from "@fortawesome/free-solid-svg-icons/faBagShopping";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -26,6 +29,12 @@ const brands = [
     {name: 'Fürstenberg', href: '#'},
     {name: 'Saint Louis', href: '#'},
     {name: 'IKEA', href: '#'},
+]
+
+const accounts = [
+    {option: "Thông tin tài khoản", href: "/information-account", icon: faCircleInfo},
+    {option: "Đơn hàng của tôi", href: "/my-order", icon: faBagShopping},
+    {option: "Đăng xuất", href: "/logout", icon: faArrowRightFromBracket},
 ]
 const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -108,7 +117,7 @@ const Header = () => {
 
                                     <PopoverPanel
                                         transition-all duration-200 ease-out
-                                        className="absolute -left-8 top-full z-10 mt-3 w-[10.5rem] max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                                        className="absolute -left-8 top-full z-10 mt-3 w-[10.5rem] max-w-md overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
                                     >
                                         <div className="p-4">
                                             {brands.map((item) => (
@@ -147,9 +156,41 @@ const Header = () => {
                         <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>
                     </CustomTooltip>
                     {isLoggedIn ? (
-                        <CustomTooltip title="Tài khoản">
-                            <FontAwesomeIcon icon={faUser} color={"#FFA726"}/>
-                        </CustomTooltip>
+                        <PopoverGroup className="hidden lg:flex lg:gap-x-12">
+                            <Popover className="relative">
+                                <PopoverButton
+                                    className="flex items-center text-white hover:text-[#FFA726] gap-x-1 text-sm font-semibold leading-6 outline-none">
+                                    <CustomTooltip title="Tài khoản">
+                                        <FontAwesomeIcon icon={faUser} color={"#FFA726"}/>
+                                    </CustomTooltip>
+                                </PopoverButton>
+                                <PopoverPanel
+                                    transition-all duration-200 ease-out
+                                    className="absolute -right-4 top-full z-10 mt-3 w-[15rem] max-w-md overflow-hidden rounded-2xl  bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
+                                >
+                                    <div className="p-4">
+                                        {accounts.map((item) => (
+                                            <div
+                                                key={item.option}
+                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                            >
+                                                <div
+                                                    className="flex w-0 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:text-[#FFA726]">
+                                                    <FontAwesomeIcon icon={item.icon}/>
+                                                </div>
+                                                <div className="flex-auto">
+                                                    <Link to={item.href}
+                                                          className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">
+                                                        {item.option}
+                                                        <span className="absolute inset-0"/>
+                                                    </Link>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </PopoverPanel>
+                            </Popover>
+                        </PopoverGroup>
                     ) : (
                         <>
                             <button className="font-semibold text-[15px] border-none outline-none">
