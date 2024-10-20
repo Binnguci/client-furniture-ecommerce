@@ -1,8 +1,9 @@
 'use client'
 import React, {useRef} from 'react';
-import {useLocation, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {Button, notification, type NotificationArgsProps} from "antd";
 import http from "../utils/http.ts";
+import LogoVertical from "../components/LogoVertical.tsx";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 export default function OTPVerify() {
@@ -101,6 +102,9 @@ export default function OTPVerify() {
     return (
         <main className="relative min-h-screen flex flex-col justify-center bg-slate-50 overflow-hidden">
             {contextHolder}
+            <Link to={"/"} className="absolute top-4 left-4">
+                <LogoVertical/>
+            </Link>
             <div className="w-full max-w-6xl mx-auto px-4 md:px-6 py-24">
                 <div className="flex justify-center">
                     <div className="max-w-md mx-auto text-center px-4 sm:px-8 py-10">
@@ -130,7 +134,7 @@ export default function OTPVerify() {
                                     variant={"solid"}
                                     color={"default"}
                                     htmlType={"submit"}
-                                    className="w-full inline-flex justify-center whitespace-nowrap rounded-lg bg-indigo-500 px-3.5 py-2.5 text-sm font-medium text-white shadow-sm shadow-indigo-950/10 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-300 focus-visible:outline-none focus-visible:ring focus-visible:ring-indigo-300 transition-colors duration-150"
+                                    className="!bg-[#FFA726] !text-black font-bold w-full hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
                                 >
                                     Xác nhận tài khoản
                                 </Button>

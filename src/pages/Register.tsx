@@ -11,6 +11,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
 import axios from "axios";
 import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
+import LogoVertical from "../components/LogoVertical.tsx";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -86,6 +87,9 @@ export default function Register() {
         <section
             className={`flex items-center justify-center ${screens.sm ? "h-screen" : "h-auto"} bg-${token.colorBgContainer} p-8`}>
             {contextHolder}
+            <div className="absolute top-4 left-4">
+                <LogoVertical/>
+            </div>
             <div className="mx-auto w-[380px] p-6">
                 <div className="text-center mb-8">
                     <Title level={2} className={`text-${screens.md ? "2xl" : "xl"}`}>Đăng ký</Title>
@@ -178,7 +182,7 @@ export default function Register() {
                     <Form.Item style={{marginBottom: "0px"}}>
                         <Button
                             variant={"solid"}
-                            color={"default"}
+                            className="!bg-[#FFA726] !text-black font-bold w-full hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
                             block
                             htmlType="submit"
                         >
@@ -192,15 +196,15 @@ export default function Register() {
                 </Form>
                 <div className="flex flex-col justify-center items-center gap-2 mt-4">
                     <Button
-                        icon={<FontAwesomeIcon icon={faFacebook} />}
-                        className="bg-blue-600 text-white w-full"
+                        icon={<FontAwesomeIcon icon={faFacebook}/>}
+                        className="!bg-[#1877F2] !text-white font-bold w-full hover:!bg-[#165dc4] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
                         onClick={() => window.location.href = 'URL_Facebook_Login'}
                     >
                         Đăng nhập bằng Facebook
                     </Button>
                     <Button
                         icon={<FontAwesomeIcon icon={faGoogle}/>}  // Thêm icon Google
-                        className="bg-red-600 text-white w-full"
+                        className="!bg-[#DB4437] !text-white font-bold w-full hover:!bg-[#C23321] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
                         onClick={() => window.location.href = 'http://localhost:8085/oauth2/authorization/google'}
                     >
                         Đăng nhập bằng Google

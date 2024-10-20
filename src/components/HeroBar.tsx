@@ -3,7 +3,7 @@ import couch from "../assets/img/couch.png";
 
 function HeroBar() {
     return (
-        <div className={"gap-2 flex"}>
+        <div className={"gap-2 flex pt-24"}>
             <div className="container mx-auto px-4">
                 <div className="flex flex-wrap justify-between items-center">
                     <div className="lg:w-5/12 w-full mb-8 lg:mb-0">
@@ -14,10 +14,10 @@ function HeroBar() {
                                 chúng tôi tự hào là lựa chọn hàng đầu cho không gian sống cao cấp tại Việt Nam</p>
                             <p>
                                 <a href="#"
-                                   className="btn bg-black text-[#FFA726] rounded px-6 py-2  mr-4 hover:bg-[#FFA726] hover:text-black font-bold">Xem
+                                   className="btn bg-black text-[#FFA726] rounded px-6 py-2  mr-4 hover:bg-[#FFA726] hover:text-black font-bold transition-colors duration-300">Xem
                                     ngay</a>
                                 <a href="#"
-                                   className="btn  text-black border-gray-800 rounded bg-[#FFA726] px-6 py-2 hover:bg-black hover:text-[#FFA726] font-bold">Khám
+                                   className="btn  text-black border-gray-800 rounded bg-[#FFA726] px-6 py-2 hover:bg-black hover:text-[#FFA726] font-bold transition-colors duration-300">Khám
                                     phá</a>
                             </p>
                         </div>
