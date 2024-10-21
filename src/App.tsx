@@ -6,6 +6,7 @@ import OTPVerify from "./pages/OTPVerify.tsx";
 import Home from "./pages/Home.tsx";
 import MainLayout from "./layout/MainLayout.tsx";
 import {Personal} from "./pages/Personal.tsx";
+import PageNotFound from "./pages/PageNotFound.tsx";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
                     <Route path={"/sign-up"} element={<Register/>}/>
                     <Route path={"/verify-otp"} element={<OTPVerify/>}/>
                     <Route path={"/sign-in"} element={<SignIn/>}/>
+                    <Route path="*" element={<PageNotFound />} />
                 </Routes>
             </div>
         </BrowserRouter>

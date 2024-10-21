@@ -63,7 +63,7 @@ export default function Register() {
             openNotificationWithIcon();
 
             setTimeout(() => {
-                navigate("/verify-otp", {state: {email: data.email}});
+                navigate("/", {state: {email: data.email}});
             }, 1000);
 
         } catch (error: unknown) {
