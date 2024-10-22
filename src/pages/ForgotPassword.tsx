@@ -1,23 +1,20 @@
 'use client';
 import React from "react";
 import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
-import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {MailOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
 import {FormSignUp} from "../types/formSignUp.ts";
 import {Link, useNavigate} from "react-router-dom";
-import {FormSignIn} from "../types/formSignIn.ts";
 import axios from "axios";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
-import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
 import LogoVertical from "../components/LogoVertical.tsx";
+import {FormForgotPassword} from "../types/formForgotPassword.ts";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
 const {useBreakpoint} = Grid;
 const {Text, Title} = AntTypography;
 
-export default function SignIn() {
+export default function ForgotPassword() {
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
@@ -37,14 +34,11 @@ export default function SignIn() {
         });
     };
 
-    const initialValues: FormSignUp = {
-        username: "",
-        fullName: "",
+    const initialValues: FormForgotPassword = {
         email: "",
-        password: "",
     }
 
-    const [form, setForm] = React.useState<FormSignIn>(initialValues);
+    const [form, setForm] = React.useState<FormForgotPassword>(initialValues);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -54,19 +48,16 @@ export default function SignIn() {
         }));
     };
 
-    const sendData = async (data: FormSignUp) => {
+    const sendData = async (data: FormForgotPassword) => {
         try {
-            const response = await http.post("/auth/login", data);
+            const response = await http.post("/user/forgot-password", data);
             console.log('Data sent successfully:', response.data);
-            const {token} = response.data.result;
-            localStorage.setItem('token', token);
             openNotificationWithIconSuccess()
             setTimeout(() => {
-                navigate("/");
+                navigate("/verify-otp");
             }, 1000);
         } catch (error: unknown) {
             let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
-
             if (axios.isAxiosError(error)) {
                 errorMessage = error.response?.data?.message || 'Tên đăng nhập hoặc mật khẩu không đúng!';
             }
@@ -88,7 +79,8 @@ export default function SignIn() {
             </Link>
             <div className="mx-auto w-[380px]   p-6">
                 <div className="text-center mb-8">
-                    <Title level={2} className={`text-${screens.md ? "2xl" : "xl"}`}>Đăng nhập</Title>
+                    <Title level={2} className={`text-${screens.md ? "2xl" : "xl"}`}>Quên mật khẩu</Title>
+                    <Text>Vui lòng điền lại mật khẩu đã đã ký</Text>
                 </div>
                 <Form
                     name="normal_signup"
@@ -97,31 +89,16 @@ export default function SignIn() {
                     requiredMark="optional"
                 >
                     <Form.Item
-                        name="username"
+                        name="email"
                         rules={[
                             {
                                 required: true,
-                                message: "Vui lòng điền tên đăng nhập!",
+                                message: "Vui lòng điền email đã đăng ký!",
                             },
                         ]}
                     >
-                        <Input prefix={<UserOutlined/>} placeholder="Tên đăng nhập" onChange={handleChange}
-                               value={form.username}/>
-                    </Form.Item>
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Vui lòng điền mật khẩu!",
-                            },
-                        ]}
-                    >
-                        <Input.Password
-                            prefix={<LockOutlined/>}
-                            placeholder="Mật khẩu"
-                            onChange={handleChange} value={form.password}
-                        />
+                        <Input prefix={<MailOutlined/>} placeholder="Địa chỉ email" onChange={handleChange}
+                               value={form.email}/>
                     </Form.Item>
                     <Form.Item style={{marginBottom: "0px"}}>
                         <Button
@@ -130,37 +107,16 @@ export default function SignIn() {
                             block
                             htmlType="submit"
                         >
-                            Đăng nhập
+                            Xác thực email
                         </Button>
-
-
                         <div className="mt-4 text-center">
-                            <Text>Bạn chưa có tài khoản?</Text>{" "}
-                            <Link to="/sign-up" className={"text-black font-bold hover:text-[#FFA726]"}>Tạo tài khoản</Link>
+                            <Text>Bạn đã nhớ ra mật khẩu?</Text>{" "}
+                            <Link to="/sign-in" className={"text-black font-bold hover:text-[#FFA726]"}>Quay lại đăng
+                                nhập</Link>
                         </div>
                     </Form.Item>
                 </Form>
 
-                <div className="flex flex-col justify-center items-center gap-2 mt-4">
-                    <Button
-                        icon={<FontAwesomeIcon icon={faFacebook}/>}
-                        className="!bg-[#1877F2] !text-white font-bold w-full hover:!bg-[#165dc4] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
-                        onClick={() => window.location.href = 'URL_Facebook_Login'}
-                    >
-                        Đăng nhập bằng Facebook
-                    </Button>
-                    <Button
-                        icon={<FontAwesomeIcon icon={faGoogle}/>}
-                        className="!bg-[#DB4437] !text-white font-bold w-full hover:!bg-[#C23321] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
-                        onClick={() => window.location.href = 'http://localhost:8085/oauth2/authorization/google'}
-                    >
-                        Đăng nhập bằng Google
-                    </Button>
-                    <div className="mt-4 text-center">
-                        <Link to={"/forgot-password"} className={"text-black font-bold text-sm hover:text-[#FFA726]"}>Quên
-                            mật khẩu?</Link>
-                    </div>
-                </div>
             </div>
         </section>
     );
