@@ -190,7 +190,7 @@ export default function Register() {
                         </Button>
                         <div className="mt-4 text-center">
                             <Text className={`text-${token.colorTextSecondary}`}>Đã có tài khoản?</Text>{" "}
-                            <Link to="/sign-in" className={"text-black font-bold hover:text-black"}>Đăng nhập</Link>
+                            <Link to="/sign-in" className={"text-black font-bold hover:text-[#FFA776]"}>Đăng nhập</Link>
                         </div>
                     </Form.Item>
                 </Form>
