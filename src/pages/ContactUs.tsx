@@ -1,100 +1,171 @@
-import product2 from "../assets/img/product-2.png";
 import GoogleMap from "../components/GoogleMap.tsx";
-import {Button, Form, Input} from "antd";
-import {LockOutlined, MailOutlined} from "@ant-design/icons";
+import HerobarContact from "../components/HerobarContact.tsx";
+import {Button, Form, Input, Modal} from "antd";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPenNib} from "@fortawesome/free-solid-svg-icons/faPenNib";
+import {faEnvelope} from "@fortawesome/free-solid-svg-icons/faEnvelope";
+import React, {useState} from "react";
+import http from "../utils/http.ts";
+import {FormContact} from "../types/formContact.ts";
+import InforContact from "../components/InforContact.tsx";
+import TextArea from "antd/lib/input/TextArea";
+import {useNavigate} from "react-router-dom";
 
 function ContactUs() {
+    const initialValues: FormContact = {
+        title: "",
+        email: "",
+        message: ""
+    }
+
+    const [form, setForm] = React.useState<FormContact>(initialValues);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const {name, value} = e.target;
+        setForm(prevForm => {
+                console.log([name])
+                console.log({
+                    ...prevForm,
+                    ...{[name]: value}
+                })
+                return {
+                    ...prevForm,
+                    ...{[name]: value}
+                }
+            }
+        );
+    };
+
+    const sendData = async (data: FormContact) => {
+        try {
+            const response = await http.post("/user/support", data);
+            console.log('Data sent successfully:', response.data);
+            Modal.confirm({
+                title: 'Gửi thành công!',
+                content: 'Tin nhắn của bạn đã được gửi đi thành công.',
+                okText: 'Tiếp tục',
+                cancelText: 'Trang chủ',
+                type: "success",
+                onOk: () => {
+                    setLoading(false);
+                },
+                onCancel: () => {
+                    navigate('/');
+                },
+                okButtonProps:{
+                    className: "!bg-[#FFA726] !text-black font-bold hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
+                },
+                cancelButtonProps:{
+                    className: "!bg-[#FFA726] !text-black font-bold hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
+                }
+            });
+        } catch (error) {
+            console.log("chưa gửi dữ liệu đi")
+            console.log(error)
+            setLoading(false);
+            Modal.confirm({
+                title: 'Gửi thất bại!',
+                content: 'Tin nhắn của bạn đã được gửi đi thất bại.',
+                okText: 'Tiếp tục',
+                cancelText: 'Trang chủ',
+                type: "error",
+                onOk: () => {
+                    setLoading(false);
+                },
+                onCancel: () => {
+                    navigate('/');
+                },
+                okButtonProps:{
+                    className: "!bg-[#FFA726] !text-black font-bold hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
+                },
+                cancelButtonProps:{
+                    className: "!bg-[#FFA726] !text-black font-bold hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
+                }
+            });
+        }
+    };
+
+    const onFinish = async () => {
+        console.log("Received values of form: ", form);
+        await sendData(form);
+    };
     return (
         <>
-            <section className={"gap-2 flex"}>
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-wrap justify-between items-center">
-                        <div className="lg:w-5/12 w-full mb-8 lg:mb-0">
-                            <div className="intro-excerpt">
-                                <h1 className="text-4xl font-bold text-[#FFA726">Liên hệ</h1>
-                                <p className="mb-4 text-[#FFA726]">Donec vitae odio quis nisl dapibus malesuada. Nullam
-                                    ac
-                                    aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-                                <p>
-                                    <a href="#"
-                                       className="btn bg-black text-[#FFA726] rounded px-6 py-2  mr-4 hover:bg-[#FFA726] hover:text-black font-bold">Xem
-                                        ngay</a>
-                                    <a href="#"
-                                       className="btn  text-black border-gray-800 rounded bg-[#FFA726] px-6 py-2 hover:bg-black hover:text-[#FFA726] font-bold">Khám
-                                        phá</a>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-                            <img src={product2}/>
+            <HerobarContact/>
+            <section className="" id="contact">
+                <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+                    <div className="mb-4">
+                        <div className="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
+                            <h3 className="font-heading mb-4 font-bold tracking-tight dark:text-white text-4xl">
+                                Liên hệ với chúng tôi
+                            </h3>
                         </div>
                     </div>
-                </div>
-            </section>
-            <section className="bg-white dark:bg-gray-900">
-                <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-                    <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Contact
-                        Us</h2>
-                    <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Got
-                        a technical issue? Want to send feedback about a beta feature? Need details about our Business
-                        plan? Let us know.</p>
-                    <Form
-                        name="normal_signup"
-                        onFinish={() => {
-                        }}
-                        layout="vertical"
-                        requiredMark="optional"
-                    >
-                        <Form.Item
-                            name="email"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng điền địa chỉ email!",
-                                },
-                            ]}
-                        >
-                            <Input prefix={<MailOutlined/>} placeholder="Email"/>
-                        </Form.Item>
-                        <Form.Item
-                            name="title"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập tiêu đề",
-                                },
-                            ]}
-                        >
-                            <Input.Password
-                                prefix={<LockOutlined/>}
-                                placeholder="Tiêu đề"
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="Nội dung"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Vui lòng nhập nội dung",
-                                },
-                            ]}
-                        >
-                            <Input.Password
-                                prefix={<LockOutlined/>}
-                                placeholder="Nhập lại nội dung"
-                            />
-                        </Form.Item>
-                        <Form.Item style={{marginBottom: "0px"}}>
-                            <Button
-                                variant={"solid"}
-                                color={"default"}
-                                block
-                                htmlType="submit"
-                            >
-                                Gửi thông tin
-                            </Button>
-                        </Form.Item>
-                    </Form>
+                    <div className="flex items-stretch justify-center">
+                        <div className="grid md:grid-cols-2">
+                            <InforContact/>
+                            <div className="card h-fit max-w-6xl p-5 md:p-12" id="form">
+                                <h2 className="mb-4 text-2xl font-bold dark:text-white text-[#FFA726]">Hãy cho chúng tôi
+                                    biết bạn cần
+                                    gì?</h2>
+                                <Form
+                                    name="normal_contact"
+                                    onFinish={onFinish}
+                                    layout="vertical"
+                                    requiredMark="optional"
+                                >
+                                    <Form.Item
+                                        name="title"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Vui lòng điền chủ đề!",
+                                            },
+                                        ]}
+                                    >
+                                        <Input prefix={<FontAwesomeIcon icon={faPenNib}/>} placeholder="Chủ đề"
+                                               name="title"
+                                               value={form.title} onChange={handleChange}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="email"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Vui lòng điền địa chỉ email!",
+                                            },
+                                        ]}
+                                    >
+                                        <Input prefix={<FontAwesomeIcon icon={faEnvelope}/>} placeholder="Email"
+                                               name="email"
+                                               value={form.email} onChange={handleChange}/>
+                                    </Form.Item>
+                                    <Form.Item
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: "Vui lòng điền nội dung muốn gửi!"
+                                            }
+                                        ]}>
+                                        <TextArea name="message" rows={4} placeholder={"Nhập nội dung..."}
+                                                  maxLength={1000} value={form.message} onChange={handleChange}/>
+                                    </Form.Item>
+                                    <Form.Item style={{marginBottom: "0px"}}>
+                                        <Button variant={"solid"}
+                                                className="!bg-[#FFA726] !text-black font-bold w-full hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
+                                                block
+                                                loading={loading}
+                                                htmlType="submit">
+                                            Gửi
+                                        </Button>
+                                    </Form.Item>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
             <GoogleMap/>
