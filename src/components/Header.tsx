@@ -177,13 +177,13 @@ const Header = () => {
                                             {brands.map((item) => (
                                                 <div
                                                     key={item.name}
-                                                    className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                                    className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50"
                                                 >
                                                     <div className="flex-auto">
                                                         <Link to={item.href}
                                                               className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">
                                                             {item.name}
-                                                            <span className="absolute inset-0"/>
+                                                            {/*<span className="absolute inset-0"/>*/}
                                                         </Link>
                                                     </div>
                                                 </div>
@@ -194,10 +194,10 @@ const Header = () => {
                             </PopoverGroup>
                         </li>
                         <li className="max-lg:border-b max-lg:py-3 px-3">
-                            <a href="javascript:void(0)"
+                            <Link to="/contact-us"
                                className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">
-                                Blog
-                            </a>
+                                Liên hệ
+                            </Link>
                         </li>
                     </ul>
                 </div>
