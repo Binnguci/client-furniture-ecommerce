@@ -10,6 +10,7 @@ import ForgotPassword from "./pages/ForgotPassword.tsx";
 import ChangePassword from "./pages/ChangePassword.tsx";
 import PageNotFound from "./pages/PageNotFound.tsx";
 import ContactUs from "./pages/ContactUs.tsx";
+import FAQ from "./pages/FAQ.tsx";
 
 function App() {
 
@@ -20,7 +21,8 @@ function App() {
                     <Route path="/" element={<MainLayout/>}>
                         <Route index element={<Home/>}/>
                         <Route path={"/user-info"} element={<Personal/>}/>
-                    <Route path={"/contact-us"} element={<ContactUs/>}/>
+                        <Route path={"/contact-us"} element={<ContactUs/>}/>
+                        <Route path={"/faqs"} element={<FAQ/>}/>
                     </Route>
                     <Route path={"/sign-up"} element={<Register/>}/>
                     <Route path={"/verify-otp"} element={<OTPVerify/>}/>

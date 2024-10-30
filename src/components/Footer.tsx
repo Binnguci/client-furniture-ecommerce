@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom";
 
 function Footer() {
     return (
@@ -22,6 +23,7 @@ function Footer() {
                             <a href="javascript:void(0)"
                                className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Bàn</a>
                         </li>
+
                     </ul>
                 </div>
 
@@ -34,15 +36,22 @@ function Footer() {
                         </li>
                         <li>
                             <a href="javascript:void(0)"
-                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Tư vấn thiết kế</a>
+                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Tư vấn thiết
+                                kế</a>
                         </li>
                         <li>
                             <a href="javascript:void(0)"
-                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Chăm sóc khách hàng</a>
+                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Chăm sóc khách
+                                hàng</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0)"
-                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Đặt hàng theo yêu cầu</a>
+                            <Link to="/policy"
+                                  className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Chính
+                                sách</Link>
+                        </li>
+                        <li>
+                            <Link to="/faqs"
+                                  className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">FAQs</Link>
                         </li>
                     </ul>
                 </div>
@@ -50,7 +59,7 @@ function Footer() {
                 <div>
                     <h4 className="text-[#FFA726] font-semibold text-lg mb-6">Phòng</h4>
                     <ul className="space-y-5">
-                        <li>
+                    <li>
                             <a href="javascript:void(0)"
                                className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Phòng ngủ</a>
                         </li>
