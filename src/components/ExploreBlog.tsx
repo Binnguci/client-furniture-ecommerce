@@ -30,7 +30,7 @@ const blogPosts = [
 
 function ExploreBlog() {
     return (
-        <div className="blog-section py-[7rem] pb-[12rem]">
+        <div className="py-[7rem] px-7">
             <div className="container mx-auto">
                 <div className="flex justify-between mb-5">
                     <div className="col-md-6">

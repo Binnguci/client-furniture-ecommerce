@@ -108,9 +108,10 @@ const Header = () => {
         <header
             ref={header}
             className={`flex header py-4 px-4 sm:px-10 bg-black font-[sans-serif] min-h-[70px] tracking-wide z-50 fixed w-full top-0  transition-[transform,opacity] duration-300 ease-in-out transform ${
-                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[-100%] opacity-0 ' 
+                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-[-100%] opacity-0 '
             }`}
         >
+
             <div className="flex flex-wrap items-center justify-between gap-4 w-full">
                 <a
                     href="javascript:void(0)"
@@ -195,7 +196,7 @@ const Header = () => {
                         </li>
                         <li className="max-lg:border-b max-lg:py-3 px-3">
                             <Link to="/contact-us"
-                               className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">
+                                  className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">
                                 Liên hệ
                             </Link>
                         </li>

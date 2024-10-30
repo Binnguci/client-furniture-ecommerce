@@ -87,9 +87,9 @@ export default function Register() {
         <section
             className={`flex items-center justify-center ${screens.sm ? "h-screen" : "h-auto"} bg-${token.colorBgContainer} p-8`}>
             {contextHolder}
-            <div className="absolute top-4 left-4">
+            <Link to={"/"} className="absolute top-4 left-4">
                 <LogoVertical/>
-            </div>
+            </Link>
             <div className="mx-auto w-[380px] p-6">
                 <div className="text-center mb-8">
                     <Title level={2} className={`text-${screens.md ? "2xl" : "xl"}`}>Đăng ký</Title>
