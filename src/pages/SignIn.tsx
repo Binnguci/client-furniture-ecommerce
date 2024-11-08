@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, {useState} from "react";
 import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
@@ -21,16 +21,17 @@ export default function SignIn() {
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
+    const [user, setUser] = useState();
 
     const openNotificationWithIconSuccess = () => {
         api.success({
-            message: 'Yêu cầu đăng ký thành công',
-            description: "Vui lòng kiểm tra email và nhập mã OTP để kích hoạt tài khoản",
+            message: 'Đăng nhập thành công',
+            description: "Chào mừng bạn trở lại",
         });
     };
     const openNotificationWithIconError = (placement: NotificationPlacement, error: string) => {
         api.error({
-            message: `Đăng ký thất bại`,
+            message: `Đăng nhập thất bại`,
             description:
             error,
             placement,
@@ -60,6 +61,7 @@ export default function SignIn() {
             console.log('Data sent successfully:', response.data);
             const {token} = response.data.result;
             localStorage.setItem('token', token);
+            setUser(user);
             openNotificationWithIconSuccess()
             setTimeout(() => {
                 navigate("/");

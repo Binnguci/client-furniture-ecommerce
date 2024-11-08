@@ -3,7 +3,7 @@ import React from "react";
 import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
 import {LockOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import LogoVertical from "../components/LogoVertical.tsx";
 import {FormChangePassword} from "../types/formChangePassword.ts";
@@ -17,6 +17,8 @@ export default function ChangePassword() {
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
+    const location = useLocation();
+    const email = location.state?.email;
 
     const openNotificationWithIconSuccess = () => {
         api.success({
@@ -34,7 +36,7 @@ export default function ChangePassword() {
     };
 
     const initialValues: FormChangePassword = {
-        email: "",
+        email: email,
         password: "",
     }
 
@@ -43,6 +45,7 @@ export default function ChangePassword() {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setForm(prevForm => ({
+
             ...prevForm,
             [name]: value,
         }));
@@ -55,7 +58,7 @@ export default function ChangePassword() {
             openNotificationWithIconSuccess()
             setTimeout(() => {
                 navigate("/sign-in");
-            }, 1000);
+            }, 2000);
         } catch (error: unknown) {
             let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
 
@@ -66,9 +69,8 @@ export default function ChangePassword() {
             console.error('Error sending data:', errorMessage);
         }
     };
-    const onFinish = async (values: FormChangePassword) => {
-        console.log("Received values of form: ", values);
-        await sendData(values);
+    const onFinish = async () => {
+        await sendData(form);
     };
 
     return (
@@ -103,6 +105,7 @@ export default function ChangePassword() {
                     >
                         <Input.Password
                             prefix={<LockOutlined/>}
+                            name="password"
                             placeholder="Nhập mật khẩu mới"
                             onChange={handleChange} value={form.password}
                         />
@@ -128,6 +131,7 @@ export default function ChangePassword() {
                     >
                         <Input.Password
                             prefix={<LockOutlined/>}
+                            name={"comfirmPassword"}
                             placeholder="Nhập lại mật khẩu mới"
                         />
                     </Form.Item>

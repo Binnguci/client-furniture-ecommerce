@@ -54,8 +54,8 @@ export default function ForgotPassword() {
             console.log('Data sent successfully:', response.data);
             openNotificationWithIconSuccess()
             setTimeout(() => {
-                navigate("/verify-otp");
-            }, 1000);
+                navigate("/verify-otp", {state: {email: data.email}});
+            }, 2000);
         } catch (error: unknown) {
             let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
             if (axios.isAxiosError(error)) {

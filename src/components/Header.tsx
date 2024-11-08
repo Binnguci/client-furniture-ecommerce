@@ -36,7 +36,7 @@ const brands = [
 const accounts = [
     {option: "Thông tin tài khoản", href: "/information-account", icon: faCircleInfo},
     {option: "Đơn hàng của tôi", href: "/my-order", icon: faBagShopping},
-    {option: "Đăng xuất", href: "/logout", icon: faArrowRightFromBracket},
+    {option: "Đăng xuất", href: "", icon: faArrowRightFromBracket},
 ]
 const Header = () => {
     const [isMenuOpen, setMenuOpen] = useState(false);
@@ -72,8 +72,7 @@ const Header = () => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         setIsLoggedIn(!!token);
-    }, []);
-
+    }, [isLoggedIn]);
 
 
     const handleToggleMenu = () => {
@@ -90,10 +89,9 @@ const Header = () => {
                 }
                 const response = await http.post("/auth/logout", {token});
                 localStorage.removeItem('token');
+                setIsLoggedIn(false);
                 console.log('Đăng xuất thành công:', response.data);
-                setTimeout(() => {
-                    navigate("/");
-                }, 100);
+                navigate("/");
             } catch (error: unknown) {
                 let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
                 if (axios.isAxiosError(error)) {
@@ -184,7 +182,6 @@ const Header = () => {
                                                         <Link to={item.href}
                                                               className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">
                                                             {item.name}
-                                                            {/*<span className="absolute inset-0"/>*/}
                                                         </Link>
                                                     </div>
                                                 </div>
@@ -227,7 +224,7 @@ const Header = () => {
                                         {accounts.map((item) => (
                                             <div
                                                 key={item.option}
-                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50"
+                                                className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-3 hover:bg-gray-50"
                                             >
                                                 <div
                                                     className="flex w-0 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:text-[#FFA726]">

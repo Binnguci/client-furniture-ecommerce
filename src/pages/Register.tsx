@@ -25,6 +25,7 @@ export default function Register() {
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
 
+
     const initialValues: FormSignUp = {
         username: "",
         fullName: "",
@@ -64,7 +65,7 @@ export default function Register() {
             openNotificationWithIcon();
 
             setTimeout(() => {
-                navigate("/", {state: {email: data.email}});
+                navigate("/wait-verify", {state: {email: data.email}});
             }, 1000);
 
         } catch (error: unknown) {

@@ -10,7 +10,7 @@ export default function OTPVerify() {
     const inputs = useRef<(HTMLInputElement | null)[]>([]);
     const navigate = useNavigate();
     const location = useLocation();
-    const {email} = location.state || {};
+    const email = location.state?.email;
     const [api, contextHolder] = notification.useNotification();
 
 
@@ -83,14 +83,14 @@ export default function OTPVerify() {
         const otpCode = inputs.current.map(input => input?.value).join('');
         console.log(otpCode, email)
         try {
-            const response = await http.post("/auth/verify-account", {
+            const response = await http.post("/user/verify-forget-password", {
                 email: email,
                 otp: otpCode
             });
             openNotificationWithIcon();
             console.log(response.data);
             setTimeout(() => {
-                navigate("/sign-in")
+                navigate("/change-password", {state: {email: email}});
             },)
         } catch (error) {
             openNotificationWithIconError('bottom')
