@@ -111,12 +111,11 @@ const Header = () => {
         >
 
             <div className="flex flex-wrap items-center justify-between gap-4 w-full">
-                <a
-                    href="javascript:void(0)"
-                    className="lg:absolute max-lg:left-10 lg:top-2/4 lg:left-2/4 lg:-translate-x-1/2 lg:-translate-y-1/2"
+                <Link to={"/"}
+                      className="lg:absolute max-lg:left-10 lg:top-2/4 lg:left-2/4 lg:-translate-x-1/2 lg:-translate-y-1/2"
                 >
                     <Logo/>
-                </a>
+                </Link>
 
                 <div
                     id="collapseMenu"
@@ -204,9 +203,12 @@ const Header = () => {
                     <CustomTooltip title="Yêu thích">
                         <FontAwesomeIcon icon={faHeart} color={"#FFA726"}/>
                     </CustomTooltip>
-                    <CustomTooltip title="Giỏ hàng">
-                        <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>
-                    </CustomTooltip>
+                    <Link to={"/cart"} className="flex items-center space-x-1">
+                        <CustomTooltip title="Giỏ hàng">
+                            <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>
+                        </CustomTooltip>
+                        <span className="font-bold text-[#FFA726] py-1">5</span>
+                    </Link>
                     {isLoggedIn ? (
                         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
                             <Popover className="relative">
