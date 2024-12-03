@@ -45,7 +45,7 @@ const MenuViewProfile = () => {
             defaultOpenKeys={['sub1']}
             mode="inline"
             items={items}
-            className={"mb-4"}
+            className={"mb-4 text-[#FFA726]"}
         />
     );
 };

@@ -13,6 +13,7 @@ import ContactUs from "./pages/ContactUs.tsx";
 import FAQ from "./pages/FAQ.tsx";
 import DetailProduct from "./pages/DetailProduct.tsx";
 import WaitVerifyAccount from "./pages/WaitVerifyAccount.tsx";
+import Cart from "./pages/Cart.tsx";
 
 function App() {
 
@@ -26,6 +27,8 @@ function App() {
                         <Route path={"/contact-us"} element={<ContactUs/>}/>
                         <Route path={"/faqs"} element={<FAQ/>}/>
                         <Route path={"/product/description"} element={<DetailProduct/>}/>
+                        <Route path={"/personal"} element={<Personal/>}/>
+                        <Route path={"/cart"} element={<Cart/>}/>
                     </Route>
                     <Route path={"/sign-up"} element={<Register/>}/>
                     <Route path={"/verify-otp"} element={<OTPVerify/>}/>
