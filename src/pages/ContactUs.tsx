@@ -98,9 +98,10 @@ function ContactUs() {
                 <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                     <div className="mb-4">
                         <div className="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
-                            <h3 className="font-heading mb-4 font-bold tracking-tight dark:text-white text-4xl">
+                            <h3 className="font-heading mb-4 font-bold text-[#FFA726] tracking-tight dark:text-white text-4xl">
                                 Liên hệ với chúng tôi
                             </h3>
+                            <div className="w-[20rem] h-[3px] bg-[#FFA726] mx-auto my-4"></div>
                         </div>
                     </div>
                     <div className="flex items-stretch justify-center">

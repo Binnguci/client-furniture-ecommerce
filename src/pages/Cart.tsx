@@ -71,12 +71,12 @@ function Cart() {
                             <table className="min-w-full bg-white border-gray-300">
                                 <thead className="bg-[#FFA726]">
                                 <tr>
-                                    <th className="px-6 py-3 text-black font-bold text-left">Image</th>
-                                    <th className="px-6 py-3 text-black font-bold text-left">Product</th>
-                                    <th className="px-6 py-3 text-black font-bold text-left">Price</th>
-                                    <th className="px-6 py-3 text-black font-bold text-left">Quantity</th>
-                                    <th className="px-6 py-3 text-black font-bold text-left">Total</th>
-                                    <th className="px-6 py-3 text-black font-bold text-left">Remove</th>
+                                    <th className="px-6 py-3 text-black font-bold text-left">Sản phẩm</th>
+                                    <th className="px-6 py-3 text-black font-bold text-left">Tên</th>
+                                    <th className="px-6 py-3 text-black font-bold text-left">Giá</th>
+                                    <th className="px-6 py-3 text-black font-bold text-left">Số lượng</th>
+                                    <th className="px-6 py-3 text-black font-bold text-left">Tổng</th>
+                                    <th className="px-6 py-3 text-black font-bold text-left">Xóa</th>
                                 </tr>
                                 </thead>
                                 <tbody>
