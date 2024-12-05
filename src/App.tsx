@@ -27,7 +27,7 @@ function App() {
                         <Route path={"/user-info"} element={<Personal/>}/>
                         <Route path={"/contact-us"} element={<ContactUs/>}/>
                         <Route path={"/faqs"} element={<FAQ/>}/>
-                        <Route path={"/product/description"} element={<DetailProduct/>}/>
+                        <Route path={"/product/:id"} element={<DetailProduct/>}/>
                         <Route path={"/products"} element={<Shop/>}/>
                         <Route path={"/personal"} element={<Personal/>}/>
                         <Route path={"/cart"} element={<Cart/>}/>
@@ -38,7 +38,7 @@ function App() {
                     <Route path={"/forgot-password"} element={<ForgotPassword/>}/>
                     <Route path={"/change-password"} element={<ChangePassword/>}/>
                     <Route path="/wait-verify" element={<WaitVerifyAccount/>}/>
-                    <Route path="*" element={<PageNotFound />} />
+                    <Route path="*" element={<PageNotFound/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

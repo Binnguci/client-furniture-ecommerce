@@ -23,7 +23,7 @@ function HerobarShop() {
                         </div>
                     </div>
                     <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
-                        <img src={product2}/>
+                        <img src={product2} alt={""}/>
                     </div>
                 </div>
             </div>

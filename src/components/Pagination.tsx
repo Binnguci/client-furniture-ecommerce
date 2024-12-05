@@ -4,8 +4,8 @@ interface PaginationProps {
     onPageChange: (page: number) => void;
 }
 
-function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
-    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
+    const pages: number[] = Array.from({length: totalPages}, (_: unknown, i: number): number => i + 1);
 
     return (
         <div className="flex items-center justify-center mt-8">
@@ -14,11 +14,11 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
                     currentPage === 1 ? "bg-gray-300 font-bold cursor-not-allowed" : "bg-black text-[#FFA726] font-bold hover:text-black hover:bg-[#FFA726]"
                 }`}
                 disabled={currentPage === 1}
-                onClick={() => onPageChange(currentPage - 1)}
+                onClick={(): void => onPageChange(currentPage - 1)}
             >
                 Previous
             </button>
-            {pages.map((page) => (
+            {pages.map((page: number) => (
                 <button
                     key={page}
                     className={`px-4 py-2 mx-1 rounded ${
@@ -26,7 +26,7 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
                             ? "bg-[#FFA726] text-black font-bold"
                             : "bg-black text-white hover:bg-[#FFA726] hover:text-black font-bold"
                     }`}
-                    onClick={() => onPageChange(page)}
+                    onClick={(): void => onPageChange(page)}
                 >
                     {page}
                 </button>
@@ -35,10 +35,10 @@ function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) 
                 className={`px-4 py-2 mx-1 rounded ${
                     currentPage === totalPages
                         ? "bg-gray-300 font-bold cursor-not-allowed"
-                        : "bg-black text-[#FFA726] font-bold hover:bg-gray-800"
+                        : "bg-black text-[#FFA726] font-bold hover:bg-[#FFA726] hover:text-black"
                 }`}
                 disabled={currentPage === totalPages}
-                onClick={() => onPageChange(currentPage + 1)}
+                onClick={(): void => onPageChange(currentPage + 1)}
             >
                 Next
             </button>

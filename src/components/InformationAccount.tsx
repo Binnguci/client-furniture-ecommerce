@@ -61,7 +61,6 @@ function InformationAccount() {
                 tabProps={{
                     type: 'editable-card',
                     hideAdd: true,
-                    onEdit: (e, action) => console.log(e, action),
                 }}
             >
                 <ProCard className={"flex-1"} direction="column" ghost gutter={[0, 16]}>
