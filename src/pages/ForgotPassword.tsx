@@ -3,11 +3,11 @@ import React from "react";
 import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
 import {MailOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
-import {FormSignUp} from "../types/formSignUp.ts";
+import {FormSignUpType} from "../types/formSignUp.type.ts";
 import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import LogoVertical from "../components/LogoVertical.tsx";
-import {FormForgotPassword} from "../types/formForgotPassword.ts";
+import {FormForgotPasswordType} from "../types/formForgotPassword.type.ts";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -34,11 +34,11 @@ export default function ForgotPassword() {
         });
     };
 
-    const initialValues: FormForgotPassword = {
+    const initialValues: FormForgotPasswordType = {
         email: "",
     }
 
-    const [form, setForm] = React.useState<FormForgotPassword>(initialValues);
+    const [form, setForm] = React.useState<FormForgotPasswordType>(initialValues);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -48,7 +48,7 @@ export default function ForgotPassword() {
         }));
     };
 
-    const sendData = async (data: FormForgotPassword) => {
+    const sendData = async (data: FormForgotPasswordType) => {
         try {
             const response = await http.post("/user/forgot-password", data);
             console.log('Data sent successfully:', response.data);
@@ -65,7 +65,7 @@ export default function ForgotPassword() {
             console.error('Error sending data:', errorMessage);
         }
     };
-    const onFinish = async (values: FormSignUp) => {
+    const onFinish = async (values: FormSignUpType) => {
         console.log("Received values of form: ", values);
         await sendData(values);
     };

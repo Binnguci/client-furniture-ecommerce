@@ -6,19 +6,19 @@ import {faPenNib} from "@fortawesome/free-solid-svg-icons/faPenNib";
 import {faEnvelope} from "@fortawesome/free-solid-svg-icons/faEnvelope";
 import React, {useState} from "react";
 import http from "../utils/http.ts";
-import {FormContact} from "../types/formContact.ts";
+import {FormContactType} from "../types/formContact.type.ts";
 import InforContact from "../components/InforContact.tsx";
 import TextArea from "antd/lib/input/TextArea";
 import {useNavigate} from "react-router-dom";
 
 function ContactUs() {
-    const initialValues: FormContact = {
+    const initialValues: FormContactType = {
         title: "",
         email: "",
         message: ""
     }
 
-    const [form, setForm] = React.useState<FormContact>(initialValues);
+    const [form, setForm] = React.useState<FormContactType>(initialValues);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ function ContactUs() {
         );
     };
 
-    const sendData = async (data: FormContact) => {
+    const sendData = async (data: FormContactType) => {
         try {
             const response = await http.post("/user/support", data);
             console.log('Data sent successfully:', response.data);

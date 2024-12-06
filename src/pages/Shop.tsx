@@ -1,11 +1,11 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import HeroBarShop from "../components/HerobarShop.tsx";
 import ProductCard from "../components/ProductCard.tsx";
 import Pagination from "../components/Pagination.tsx";
-import product1 from "../assets/img/product-1.png";
-import {useNavigate} from "react-router-dom";
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/react";
 import {ChevronDownIcon, MinusIcon, PlusIcon} from "@heroicons/react/20/solid";
+import http from "../utils/http.ts";
+import {Product} from "../types/product.type.ts";
 
 const sortOptions = [
     {name: 'Sản phẩm mới', href: '#', current: false},
@@ -65,22 +65,26 @@ function classNames(...classes: (string | undefined | null | boolean)[]): string
 
 
 function Shop() {
-    const products = Array(30).fill({
-        id: 1,
-        name: "Nordic Chair",
-        price: "$50.00",
-        img: product1,
-    });
-    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
-    const totalPages: number = Math.ceil(products.length / itemsPerPage);
 
-    const handleClick = (id: number): void => {
-        navigate(`/product/${id}`);
-    };
+    const [products, setProducts] = useState<Product[]>([]);
 
-    const handlePageChange = (page: number) => {
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await http.get("/product");
+                setProducts(response.data.result);
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            }
+        })();
+    }, []);
+
+
+    const totalPages: number = products ? Math.ceil(products.length / itemsPerPage) : 1;
+
+    const handlePageChange = (page: number): void => {
         setCurrentPage(page);
     };
 
@@ -99,7 +103,8 @@ function Shop() {
                         <div className="flex items-center">
                             <Menu as="div" className="relative inline-block text-left">
                                 <div>
-                                    <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                                    <MenuButton
+                                        className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                                         Lọc
                                         <ChevronDownIcon
                                             aria-hidden="true"
@@ -141,7 +146,8 @@ function Shop() {
                                                 <span className="font-medium text-black">{section.name}</span>
                                                 <span className="ml-6 flex items-center">
                           <PlusIcon aria-hidden="true" className="size-5 group-data-[open]:hidden text-black"/>
-                          <MinusIcon aria-hidden="true" className="size-5 group-[&:not([data-open])]:hidden text-black"/>
+                          <MinusIcon aria-hidden="true"
+                                     className="size-5 group-[&:not([data-open])]:hidden text-black"/>
                         </span>
                                             </DisclosureButton>
                                         </h3>
@@ -197,10 +203,10 @@ function Shop() {
                                     {displayedProducts.map((product, index) => (
                                         <ProductCard
                                             key={index}
-                                            img={product.img}
+                                            img={product.images[0].imageUrl}
                                             name={product.name}
                                             price={product.price}
-                                            onClick={() => handleClick(product.id)}
+                                            id={product.id}
                                         />
                                     ))}
                                 </div>
@@ -209,12 +215,11 @@ function Shop() {
                     </section>
                 </main>
                 <div className={"mb-6"}>
-                    {/*Phân trang*/}
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </div>
         </div>

@@ -13,27 +13,27 @@ import product_item6 from "../assets/img/product-item6.jpg";
 function Home() {
     const cards = [
         {
-            title: "Round Mirror",
+            title: "Phòng khách",
             src: product_item1
         },
         {
-            title: "Spotlight",
+            title: "Phòng ngủ",
             src: product_item2
         },
         {
-            title: "Soap dispenser wall mounted",
+            title: "Phòng tắm",
             src: product_item3
         },
         {
-            title: "Soap dispenser",
+            title: "Phòng bếp",
             src: product_item4
         },
         {
-            title: "Tissue box",
+            title: "Phòng làm việc",
             src: product_item5
         },
         {
-            title: "Doorstop",
+            title: "Phòng ăn",
             src: product_item6
         },
     ];
@@ -46,7 +46,6 @@ function Home() {
             <h2 className="text-center text-3xl text-[#FFA726] font-bold mt-20">Sản phẩm nổi bậc</h2>
             <div className="w-[20rem] h-[3px] bg-[#FFA726] mx-auto my-4"></div>
             <FocusCards cards={cards}/>
-            {/*<CarouselTest/>*/}
             <ExploreBlog/>
         </>
     );

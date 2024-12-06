@@ -3,9 +3,9 @@ import React, {useState} from "react";
 import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
-import {FormSignUp} from "../types/formSignUp.ts";
+import {FormSignUpType} from "../types/formSignUp.type.ts";
 import {Link, useNavigate} from "react-router-dom";
-import {FormSignIn} from "../types/formSignIn.ts";
+import {FormSignInType} from "../types/formSignIn.type.ts";
 import axios from "axios";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
@@ -38,14 +38,14 @@ export default function SignIn() {
         });
     };
 
-    const initialValues: FormSignUp = {
+    const initialValues: FormSignUpType = {
         username: "",
         fullName: "",
         email: "",
         password: "",
     }
 
-    const [form, setForm] = React.useState<FormSignIn>(initialValues);
+    const [form, setForm] = React.useState<FormSignInType>(initialValues);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -55,7 +55,7 @@ export default function SignIn() {
         }));
     };
 
-    const sendData = async (data: FormSignUp) => {
+    const sendData = async (data: FormSignUpType) => {
         try {
             const response = await http.post("/auth/login", data);
             console.log('Data sent successfully:', response.data);
@@ -76,7 +76,7 @@ export default function SignIn() {
             console.error('Error sending data:', errorMessage);
         }
     };
-    const onFinish = async (values: FormSignUp) => {
+    const onFinish = async (values: FormSignUpType) => {
         console.log("Received values of form: ", values);
         await sendData(values);
     };

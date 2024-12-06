@@ -6,7 +6,7 @@ import http from "../utils/http.ts";
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import axios from "axios";
 import LogoVertical from "../components/LogoVertical.tsx";
-import {FormChangePassword} from "../types/formChangePassword.ts";
+import {FormChangePasswordType} from "../types/formChangePassword.type.ts";
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -35,12 +35,12 @@ export default function ChangePassword() {
         });
     };
 
-    const initialValues: FormChangePassword = {
+    const initialValues: FormChangePasswordType = {
         email: email,
         password: "",
     }
 
-    const [form, setForm] = React.useState<FormChangePassword>(initialValues);
+    const [form, setForm] = React.useState<FormChangePasswordType>(initialValues);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
@@ -51,7 +51,7 @@ export default function ChangePassword() {
         }));
     };
 
-    const sendData = async (data: FormChangePassword) => {
+    const sendData = async (data: FormChangePasswordType) => {
         try {
             const response = await http.post("/user/change-password", data);
             console.log('Data sent successfully:', response.data);

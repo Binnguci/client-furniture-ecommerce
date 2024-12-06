@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface Review {
     id: number;
-    name: string;
+    username: string;
     rating: number;
     comment: string;
     date: string;
@@ -10,6 +10,7 @@ export interface Review {
     isPurchased: boolean;
     description?: string;
     likes: number;
+    updatedAt: string;
 }
 
 export interface ReviewProps extends Review {

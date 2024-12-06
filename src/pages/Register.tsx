@@ -5,7 +5,7 @@ import {Button, Form, Grid, Input, notification, theme, Typography as AntTypogra
 
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
-import {FormSignUp} from "../types/formSignUp.ts";
+import {FormSignUpType} from "../types/formSignUp.type.ts";
 import {Link, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
@@ -26,14 +26,14 @@ export default function Register() {
     const [api, contextHolder] = notification.useNotification();
 
 
-    const initialValues: FormSignUp = {
+    const initialValues: FormSignUpType = {
         username: "",
         fullName: "",
         email: "",
         password: "",
     }
 
-    const [form, setForm] = React.useState<FormSignUp>(initialValues);
+    const [form, setForm] = React.useState<FormSignUpType>(initialValues);
 
     const openNotificationWithIcon = () => {
         api.success({
@@ -58,7 +58,7 @@ export default function Register() {
         }));
     };
 
-    const sendData = async (data: FormSignUp) => {
+    const sendData = async (data: FormSignUpType) => {
         try {
             const response = await http.post("/auth/sign-up", data);
             console.log('Data sent successfully:', response.data);
@@ -79,7 +79,7 @@ export default function Register() {
         }
     };
 
-    const onFinish = async (values: FormSignUp) => {
+    const onFinish = async (values: FormSignUpType) => {
         console.log("Received values of form: ", values);
         await sendData(values);
     };
