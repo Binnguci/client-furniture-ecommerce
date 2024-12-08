@@ -1,35 +1,30 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import HerobarWishlist from "../components/HerobarWishlist.tsx";
 import ProductCard from "../components/ProductCard.tsx";
-import product1 from "../assets/img/product-1.png";
-import product2 from "../assets/img/product-2.png";
-import product3 from "../assets/img/product-3.png";
+import { useUser } from "../context/user.context.tsx";
+import { fetchWishlist } from "../store/wishlist.slice.ts";
+import { showProductInWishlist } from "../store/product.wishlist.slice.ts";
+import type { AppDispatch, RootState } from "../store/store.ts";
 
-const displayedProducts = [
-    {
-        id: 1,
-        name: "Sản phẩm 1",
-        price: "500.000 VNĐ",
-        images: product1,
-    },
-    {
-        id: 2,
-        name: "Sản phẩm 2",
-        price: "1.000.000 VNĐ",
-        images: product2,
-    },
-    {
-        id: 3,
-        name: "Sản phẩm 3",
-        price: "750.000 VNĐ",
-        images: product3,
-    },
-];
-
+const useAppDispatch: () => AppDispatch = useDispatch;
 
 function Wishlist() {
+    const { user } = useUser();
+    const email = user?.email;
+    const dispatch = useAppDispatch();
+    const wishlistProducts = useSelector((state: RootState) => state.productWishlist.items);
+    console.log(wishlistProducts);
+    useEffect(() => {
+        if (email) {
+            dispatch(fetchWishlist(email));
+            dispatch(showProductInWishlist(email));
+        }
+    }, [dispatch, email]);
+
     return (
         <div>
-            <HerobarWishlist/>
+            <HerobarWishlist />
             <section id="contact">
                 <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                     <div className="mb-4">
@@ -43,10 +38,10 @@ function Wishlist() {
                 </div>
                 <section aria-labelledby="products-heading" className="pb-24 pt-6 flex justify-center">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-32 max-w-5xl mx-auto">
-                        {displayedProducts.map((product, index) => (
+                        {wishlistProducts.map((product) => (
                             <ProductCard
-                                key={index}
-                                img={product.images}
+                                key={product.id}
+                                img={product.images[0].imageUrl}
                                 name={product.name}
                                 price={product.price}
                                 id={product.id}
@@ -54,7 +49,6 @@ function Wishlist() {
                         ))}
                     </div>
                 </section>
-
             </section>
         </div>
     );

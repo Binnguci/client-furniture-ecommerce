@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from "react";
+import React from "react";
 import {Button, Form, Grid, Input, notification, type NotificationArgsProps, Typography as AntTypography} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
 import http from "../utils/http.ts";
@@ -11,6 +11,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
 import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
 import LogoVertical from "../components/LogoVertical.tsx";
+import { useUser } from "../context/user.context.tsx";
+
 
 type NotificationPlacement = NotificationArgsProps['placement'];
 
@@ -21,7 +23,8 @@ export default function SignIn() {
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
-    const [user, setUser] = useState();
+    const {setUser} = useUser();
+
 
     const openNotificationWithIconSuccess = () => {
         api.success({
@@ -59,8 +62,9 @@ export default function SignIn() {
         try {
             const response = await http.post("/auth/login", data);
             console.log('Data sent successfully:', response.data);
-            const {token} = response.data.result;
-            localStorage.setItem('token', token);
+            const {accessToken} = response.data.result;
+            localStorage.setItem('accessToken', accessToken);
+            const { user } = response.data.result;
             setUser(user);
             openNotificationWithIconSuccess()
             setTimeout(() => {
@@ -138,7 +142,8 @@ export default function SignIn() {
 
                         <div className="mt-4 text-center">
                             <Text>Bạn chưa có tài khoản?</Text>{" "}
-                            <Link to="/sign-up" className={"text-black font-bold hover:text-[#FFA726]"}>Tạo tài khoản</Link>
+                            <Link to="/sign-up" className={"text-black font-bold hover:text-[#FFA726]"}>Tạo tài
+                                khoản</Link>
                         </div>
                     </Form.Item>
                 </Form>

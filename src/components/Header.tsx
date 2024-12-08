@@ -70,7 +70,7 @@ const Header = () => {
     }, [lastScrollY]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('accessToken');
         setIsLoggedIn(!!token);
     }, [isLoggedIn]);
 
@@ -82,13 +82,13 @@ const Header = () => {
     const handleOnClick = async (option: string) => {
         if (option === "Đăng xuất") {
             try {
-                const token = localStorage.getItem('token');
+                const token = localStorage.getItem('accessToken');
                 if (!token) {
                     console.error('Không tìm thấy token trong localStorage');
                     return;
                 }
                 const response = await http.post("/auth/logout", {token});
-                localStorage.removeItem('token');
+                localStorage.removeItem('accessToken');
                 setIsLoggedIn(false);
                 console.log('Đăng xuất thành công:', response.data);
                 navigate("/");
@@ -196,14 +196,20 @@ const Header = () => {
                                 Liên hệ
                             </Link>
                         </li>
+                        <li className="max-lg:border-b max-lg:py-3 px-3">
+                            <Link to="/about"
+                                  className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">
+                                Giới thiệu
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 
                 <div className="flex items-center ml-auto space-x-6">
                     <Link to={"/wishlist"}>
-                    <CustomTooltip title="Yêu thích">
-                        <FontAwesomeIcon icon={faHeart} color={"#FFA726"}/>
-                    </CustomTooltip>
+                        <CustomTooltip title="Yêu thích">
+                            <FontAwesomeIcon icon={faHeart} color={"#FFA726"}/>
+                        </CustomTooltip>
                     </Link>
                     <Link to={"/cart"} className="flex items-center space-x-1">
                         <CustomTooltip title="Giỏ hàng">
