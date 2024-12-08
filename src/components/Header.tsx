@@ -200,9 +200,11 @@ const Header = () => {
                 </div>
 
                 <div className="flex items-center ml-auto space-x-6">
+                    <Link to={"/wishlist"}>
                     <CustomTooltip title="Yêu thích">
                         <FontAwesomeIcon icon={faHeart} color={"#FFA726"}/>
                     </CustomTooltip>
+                    </Link>
                     <Link to={"/cart"} className="flex items-center space-x-1">
                         <CustomTooltip title="Giỏ hàng">
                             <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>

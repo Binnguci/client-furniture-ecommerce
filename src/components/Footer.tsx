@@ -1,5 +1,28 @@
 import {Link} from "react-router-dom";
-
+import {AnimatedTooltip} from "./ui/animated-tooltip.tsx";
+import binnguci from "../assets/img/avtbinnguci.jpg";
+import binnguci2 from "../assets/img/binnguci2.jpeg";
+import binnguci3 from "../assets/img/binnguci3.jpeg";
+const dataDev= [
+    {
+        id: 1,
+        name: "Nguyễn Thanh Bình",
+        designation: "Frontend Developer",
+        image: binnguci
+    },
+    {
+        id: 2,
+        name: "Bình Nguyễn",
+        designation: "Business Analyst",
+        image: binnguci2
+    },
+    {
+        id: 3,
+        name: "Binnguci",
+        designation: "Backend Developer",
+        image: binnguci3
+    },
+];
 function Footer() {
     return (
         <footer className="font-sans tracking-wide bg-black py-10 px-10">
@@ -59,7 +82,7 @@ function Footer() {
                 <div>
                     <h4 className="text-[#FFA726] font-semibold text-lg mb-6">Phòng</h4>
                     <ul className="space-y-5">
-                    <li>
+                        <li>
                             <a href="javascript:void(0)"
                                className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">Phòng ngủ</a>
                         </li>
@@ -95,15 +118,21 @@ function Footer() {
                         </li>
                         <li>
                             <a href="javascript:void(0)"
-                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">DÉCOR WALTHER</a>
+                               className="hover:text-[#FFA726] text-gray-300 text-[15px] transition-all">DÉCOR
+                                WALTHER</a>
                         </li>
                     </ul>
                 </div>
+
+
+            </div>
+            <div className="flex flex-row items-center justify-center my-16 w-full">
+                <AnimatedTooltip items={dataDev}/>
             </div>
 
             <div className="border-t text-center border-[#6b5f5f] pt-8 mt-8">
                 <p className="text-gray-300 text-[15px]">
-                    © Binnguci. Nội thất cao cấp    .
+                    © Binnguci. Nội thất cao cấp .
                 </p>
             </div>
         </footer>

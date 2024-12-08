@@ -15,6 +15,8 @@ import DetailProduct from "./pages/DetailProduct.tsx";
 import WaitVerifyAccount from "./pages/WaitVerifyAccount.tsx";
 import Cart from "./pages/Cart.tsx";
 import Shop from "./pages/Shop.tsx";
+import Wishlist from "./pages/Wishlist.tsx";
+import AboutUs from "./pages/AboutUs.tsx";
 
 function App() {
 
@@ -31,6 +33,8 @@ function App() {
                         <Route path={"/products"} element={<Shop/>}/>
                         <Route path={"/personal"} element={<Personal/>}/>
                         <Route path={"/cart"} element={<Cart/>}/>
+                        <Route path={"/wishlist"} element={<Wishlist/>}/>
+                        <Route path={"/about"} element={<AboutUs/>}/>
                     </Route>
                     <Route path={"/sign-up"} element={<Register/>}/>
                     <Route path={"/verify-otp"} element={<OTPVerify/>}/>
