@@ -1,6 +1,6 @@
 import {Outlet} from "react-router-dom";
 
-function LayoutWithoutHeader() {
+function WithoutHeaderLayout() {
     return (
         <div>
             <Outlet />
@@ -8,4 +8,4 @@ function LayoutWithoutHeader() {
     );
 }
 
-export default LayoutWithoutHeader;
+export default WithoutHeaderLayout;

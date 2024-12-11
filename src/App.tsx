@@ -17,9 +17,17 @@ import Cart from "./pages/Cart.tsx";
 import Shop from "./pages/Shop.tsx";
 import Wishlist from "./pages/Wishlist.tsx";
 import AboutUs from "./pages/AboutUs.tsx";
+import WithoutHeaderLayout from "./layout/WithoutHeaderLayout.tsx";
+import {useEffect} from "react";
+import {loadAuthFromStorage} from "./store/authActions.ts";
+import {useAppDispatch} from "./store/store.ts";
 
 function App() {
+    const dispatch = useAppDispatch();
 
+    useEffect(() => {
+        dispatch(loadAuthFromStorage());
+    }, [dispatch]);
     return (
         <BrowserRouter>
             <div className="App">
@@ -36,13 +44,15 @@ function App() {
                         <Route path={"/wishlist"} element={<Wishlist/>}/>
                         <Route path={"/about"} element={<AboutUs/>}/>
                     </Route>
-                    <Route path={"/sign-up"} element={<Register/>}/>
-                    <Route path={"/verify-otp"} element={<OTPVerify/>}/>
-                    <Route path={"/sign-in"} element={<SignIn/>}/>
-                    <Route path={"/forgot-password"} element={<ForgotPassword/>}/>
-                    <Route path={"/change-password"} element={<ChangePassword/>}/>
-                    <Route path="/wait-verify" element={<WaitVerifyAccount/>}/>
-                    <Route path="*" element={<PageNotFound/>}/>
+                    <Route element={<WithoutHeaderLayout/>}>
+                        <Route path={"/sign-up"} element={<Register/>}/>
+                        <Route path={"/verify-otp"} element={<OTPVerify/>}/>
+                        <Route path={"/sign-in"} element={<SignIn/>}/>
+                        <Route path={"/forgot-password"} element={<ForgotPassword/>}/>
+                        <Route path={"/change-password"} element={<ChangePassword/>}/>
+                        <Route path="/wait-verify" element={<WaitVerifyAccount/>}/>
+                        <Route path="*" element={<PageNotFound/>}/>
+                    </Route>
                 </Routes>
             </div>
         </BrowserRouter>

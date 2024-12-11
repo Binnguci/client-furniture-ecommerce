@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import HerobarWishlist from "../components/HerobarWishlist.tsx";
 import ProductCard from "../components/ProductCard.tsx";
 import { useUser } from "../context/user.context.tsx";
-import { fetchWishlist } from "../store/wishlist.slice.ts";
+import {fetchWishlist} from "../store/wishlist.slice.ts";
 import { showProductInWishlist } from "../store/product.wishlist.slice.ts";
 import type { AppDispatch, RootState } from "../store/store.ts";
 
@@ -14,12 +14,10 @@ function Wishlist() {
     const email = user?.email;
     const dispatch = useAppDispatch();
     const wishlistProducts = useSelector((state: RootState) => state.productWishlist.items);
-    console.log(wishlistProducts);
+
     useEffect(() => {
-        if (email) {
-            dispatch(fetchWishlist(email));
-            dispatch(showProductInWishlist(email));
-        }
+        dispatch(showProductInWishlist());
+        dispatch(fetchWishlist());
     }, [dispatch, email]);
 
     return (

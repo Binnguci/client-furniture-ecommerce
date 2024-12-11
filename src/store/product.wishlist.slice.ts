@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import http from "../utils/http.ts";
+import {Product} from "../types/product.type.ts";
 
 interface ProductWishlistState {
-    items: Array<{ id: number; name: string; price: string; image: string }>;
+    items: Product[];
     loading: boolean;
     error: string | null;
 }
@@ -15,16 +16,16 @@ const initialState: ProductWishlistState = {
 
 export const showProductInWishlist = createAsyncThunk(
     'productWishlist/fetchProducts',
-    async (email: string, { rejectWithValue }) => {
+    async () => {
         try {
-            const response = await http.get('/product/wishlist', { params: { email } });
+            const response = await http.get('/wishlist');
             console.log('Fetched Wishlist Products:', response.data.result);
             return response.data.result;
         } catch (error: unknown) {
             if (error instanceof Error) {
-                return rejectWithValue(error.message);
+                return error.message;
             }
-            return rejectWithValue('Unexpected error');
+            return 'Unexpected error';
         }
     }
 );

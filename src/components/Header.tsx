@@ -12,6 +12,9 @@ import {faCircleInfo} from "@fortawesome/free-solid-svg-icons/faCircleInfo";
 import {faBagShopping} from "@fortawesome/free-solid-svg-icons/faBagShopping";
 import http from "../utils/http.ts";
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../store/store.ts";
+import {logout} from "../store/authActions.ts";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -45,6 +48,8 @@ const Header = () => {
     const [isVisible, setIsVisible] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
     const header = useRef(null);
+    const user = useSelector((state: RootState) => state.auth.user);
+    const dispatch = useAppDispatch();
 
 
     const handleScroll = () => {
@@ -88,7 +93,7 @@ const Header = () => {
                     return;
                 }
                 const response = await http.post("/auth/logout", {token});
-                localStorage.removeItem('accessToken');
+                dispatch(logout());
                 setIsLoggedIn(false);
                 console.log('Đăng xuất thành công:', response.data);
                 navigate("/");
@@ -225,6 +230,11 @@ const Header = () => {
                                     <CustomTooltip title="Tài khoản">
                                         <FontAwesomeIcon icon={faUser} color={"#FFA726"}/>
                                     </CustomTooltip>
+                                    {user ? (
+                                        <h1 className={"text-[#FFA726]"}>{user.username}</h1>
+                                    ) : (
+                                        <h1>Welcome, Guest</h1>
+                                    )}
                                 </PopoverButton>
                                 <PopoverPanel
                                     transition-all duration-200 ease-out

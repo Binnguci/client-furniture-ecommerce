@@ -4,11 +4,11 @@ import {faHeart as faHeartOutline} from "@fortawesome/free-regular-svg-icons";
 import {faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
 import {styled} from "@mui/material/styles";
 import {Tooltip, tooltipClasses, TooltipProps} from "@mui/material";
-import {useUser} from "../context/user.context.tsx";
 import {useEffect} from "react";
 import type {AppDispatch, RootState} from "../store/store.ts";
 import {fetchWishlist, toggleWishlist} from "../store/wishlist.slice.ts";
 import {useDispatch, useSelector} from "react-redux";
+import {notification} from "antd";
 
 const useAppDispatch: () => AppDispatch = useDispatch;
 
@@ -32,32 +32,35 @@ const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
 }));
 
 function ProductCard({img, name, price, id}: ProductCardProps) {
-    const {user} = useUser();
-    const email = user?.email;
     const dispatch = useAppDispatch();
-    const wishlist = useSelector((state: RootState) => state.wishList.items);
+    const wishlist: number[] = useSelector((state: RootState): number[] => state.wishList.items);
+    const [api, contextHolder] = notification.useNotification();
 
+    useEffect((): void => {
+        dispatch(fetchWishlist());
+    }, [dispatch]);
 
-    useEffect(() => {
-        if (email) {
-            dispatch(fetchWishlist(email));
-        }
-    }, [dispatch, email]);
 
     const isFavorite = wishlist.includes(id);
 
-    const toggleFavorite = () => {
-        if (!email) {
-            console.error("Email is required to modify wishlist.");
-            return;
+    const toggleFavorite = (): void => {
+        dispatch(toggleWishlist({productID: id, isFavorite}));
+        if (isFavorite) {
+            api.warning({
+                message: 'Đã hủy yêu thích sản phẩm',
+            });
+        } else {
+            api.success({
+                message: 'Đã thêm sản phẩm vào yêu thích',
+            });
         }
-        dispatch(toggleWishlist({email, productID: id, isFavorite}));
     };
     console.log(wishlist);
 
 
     return (
         <div className="w-[250px] mx-auto relative">
+            {contextHolder}
             <button
                 className="absolute top-2 right-2 z-10 text-[#FFA726]"
                 onClick={toggleFavorite}

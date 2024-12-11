@@ -6,32 +6,7 @@ import binnguci2 from "../assets/img/binnguci2.jpeg";
 import binnguci3 from "../assets/img/binnguci3.jpeg"
 import CarouselAboutUs from "../components/CarouselAboutUs.tsx";
 import {BackgroundGradient} from "../components/ui/background-gradient.tsx";
-/*type Testimonial = {
-    quote: string;
-    name: string;
-    designation: string;
-    src: string;
-};
-const testimonials: Testimonial[] = [
-    {
-        quote: "Tôi tự hào về những sản phẩm mà chúng tôi đã tạo ra.",
-        name: "Thanh Bình",
-        designation: "Frontend Developer",
-        src: binnguci
-    },
-    {
-        quote: "Bạn sẽ hài lòng với những sản phẩm mà chúng tôi cung cấp.",
-        name: "Binnguci",
-        designation: "Backend Developer",
-        src: binnguci2
-    },
-    {
-        quote: "Mục tiêu của chúng tôi là mang lại sự hài lòng cho khách hàng.",
-        name: "Bình Nguyễn",
-        designation: "Database Developer",
-        src: binnguci3
-    },
-];*/
+import {useEffect} from "react";
 
 const testimonials = [
     {
@@ -59,6 +34,13 @@ const testimonials = [
 
 
 function AboutUs() {
+    function scrollTop(){
+        window.scrollTo(0, 0);
+    }
+
+    useEffect(() => {
+        scrollTop();
+    }, []);
     return (
         <div>
             <HeroBarAboutUs/>

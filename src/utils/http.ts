@@ -1,4 +1,5 @@
 import axios, {AxiosInstance} from "axios";
+import {store} from "../store/store.ts";
 
 class Http {
     instance: AxiosInstance;
@@ -9,12 +10,11 @@ class Http {
         });
         this.instance.interceptors.request.use(
             (config) => {
-                const accessToken = localStorage.getItem("accessToken");
-
+                const state = store.getState();
+                const accessToken = state.auth.accessToken;
                 if (accessToken) {
                     config.headers["Authorization"] = `Bearer ${accessToken}`;
                 }
-
                 return config;
             },
             (error) => {

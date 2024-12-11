@@ -1,5 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
-import http from "../utils/http.ts";
+import React, {createContext, useContext, useState} from "react";
 
 interface User {
     id: number;
@@ -15,31 +14,11 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
-export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
 
-    useEffect(() => {
-        (async () => {
-            try {
-                const accessToken = localStorage.getItem("accessToken");
-                if (accessToken) {
-                    const response = await http.get(`/user/get-information-user`, {
-                        params: {
-                            accessToken: accessToken
-                        }
-                    });
-                    setUser(response.data.result);
-                } else {
-                    console.error("AccessToken không tồn tại trong localStorage");
-                }
-            } catch (error) {
-                console.error("Lỗi khi lấy thông tin người dùng:", error);
-            }
-        })();
-    }, []);
-
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{user, setUser}}>
             {children}
         </UserContext.Provider>
     );

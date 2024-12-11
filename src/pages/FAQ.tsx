@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import http from "../utils/http.ts";
-
-interface FAQItem {
-    id: number;
-    question: string;
-    answer: string;
-    createdAt: string;
-    updatedAt: string;
-    deletedAt: string | null;
-}
+import {Faqs} from "../types/faq.type.ts";
 
 function FAQ() {
-    const [faqs, setFaqs] = useState<FAQItem[]>([]);
-    const [openFAQIndex, setOpenFAQIndex] = useState<number | null>(null); // Thêm state để theo dõi câu hỏi mở
+    const [faqs, setFaqs] = useState<Faqs[]>([]);
+    const [openFAQIndex, setOpenFAQIndex] = useState<number | null>(null);
+
+    function scrollToTop(): void{
+        window.scrollTo(0, 0);
+    }
 
     useEffect(() => {
+        scrollToTop();
         const fetchFAQs = async () => {
             try {
                 const response = await http.get('/faqs');

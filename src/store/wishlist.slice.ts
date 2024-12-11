@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import http from "../utils/http.ts";
 
 interface WishlistState {
@@ -15,11 +15,10 @@ const initialState: WishlistState = {
 
 export const fetchWishlist = createAsyncThunk(
     'wishlist/fetchWishlist',
-    async (email: string, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const response = await http.get('/product/wishlist', { params: { email } });
-            console.log('API Response:', response.data.result);
-            return response.data.result.map((item: { id: number }) => item.id);
+            const response = await http.get('/wishlist');
+            return response.data.result.map((item: { id: number }): number => item.id);
         } catch (error: unknown) {
             if (error instanceof Error) {
                 return rejectWithValue(error.message);
@@ -29,19 +28,19 @@ export const fetchWishlist = createAsyncThunk(
     }
 );
 
+
 export const toggleWishlist = createAsyncThunk<
     number,
-    { email: string; productID: number; isFavorite: boolean },
+    { productID: number; isFavorite: boolean },
     { rejectValue: string }
 >(
     'wishlist/toggleWishlist',
-    async ({ email, productID, isFavorite }, { rejectWithValue }) => {
+    async ({ productID, isFavorite }, { rejectWithValue }) => {
         try {
-            const requestBody = { email, productID };
             if (isFavorite) {
-                await http.delete('/product/delete-wishlist', { data: requestBody });
+                await http.delete('/wishlist/delete-wishlist', { data: { productID } });
             } else {
-                await http.post('/product/add-to-wishlist', requestBody);
+                await http.post('/wishlist/add-to-wishlist', { productID });
             }
             return productID;
         } catch (error: unknown) {
@@ -54,12 +53,13 @@ export const toggleWishlist = createAsyncThunk<
 );
 
 
+
 const wishlistSlice = createSlice({
     name: 'wishlist',
     initialState,
     reducers: {
         removeItemFromWishlist(state, action) {
-            state.items = state.items.filter((id) => id !== action.payload);
+            state.items = state.items.filter((id: number): boolean => id !== action.payload);
         },
         addItemToWishlist(state, action) {
             if (!state.items.includes(action.payload)) {
@@ -67,25 +67,25 @@ const wishlistSlice = createSlice({
             }
         },
     },
-    extraReducers: (builder) => {
+    extraReducers: (builder): void => {
         builder
-            .addCase(fetchWishlist.pending, (state) => {
+            .addCase(fetchWishlist.pending, (state): void => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchWishlist.fulfilled, (state, action) => {
+            .addCase(fetchWishlist.fulfilled, (state, action): void => {
                 console.log('Fetched Wishlist IDs:', action.payload);
                 state.items = action.payload;
             })
-            .addCase(fetchWishlist.rejected, (state, action) => {
+            .addCase(fetchWishlist.rejected, (state, action): void => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
 
-            .addCase(toggleWishlist.fulfilled, (state, action) => {
+            .addCase(toggleWishlist.fulfilled, (state, action): void => {
                 const productID = action.payload;
                 if (state.items.includes(productID)) {
-                    state.items = state.items.filter((id) => id !== productID);
+                    state.items = state.items.filter((id): boolean => id !== productID);
                 } else {
                     state.items.push(productID);
                 }
@@ -93,6 +93,6 @@ const wishlistSlice = createSlice({
     },
 });
 
-export const { removeItemFromWishlist, addItemToWishlist } = wishlistSlice.actions;
+export const {removeItemFromWishlist, addItemToWishlist} = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;

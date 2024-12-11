@@ -11,7 +11,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faFacebook} from "@fortawesome/free-brands-svg-icons/faFacebook";
 import {faGoogle} from "@fortawesome/free-brands-svg-icons/faGoogle";
 import LogoVertical from "../components/LogoVertical.tsx";
-import { useUser } from "../context/user.context.tsx";
+import {useDispatch} from "react-redux";
+import {setAccessToken, setUser} from "../store/auth.slice.ts";
 
 
 type NotificationPlacement = NotificationArgsProps['placement'];
@@ -23,8 +24,7 @@ export default function SignIn() {
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
-    const {setUser} = useUser();
-
+    const dispatch = useDispatch();
 
     const openNotificationWithIconSuccess = () => {
         api.success({
@@ -62,10 +62,10 @@ export default function SignIn() {
         try {
             const response = await http.post("/auth/login", data);
             console.log('Data sent successfully:', response.data);
-            const {accessToken} = response.data.result;
+            const {accessToken, user} = response.data.result;
             localStorage.setItem('accessToken', accessToken);
-            const { user } = response.data.result;
-            setUser(user);
+            dispatch(setAccessToken(accessToken))
+            dispatch(setUser(user));
             openNotificationWithIconSuccess()
             setTimeout(() => {
                 navigate("/");

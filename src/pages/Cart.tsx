@@ -128,7 +128,7 @@ function Cart() {
                                             <button
                                                 type="button"
                                                 onClick={() => handleRemove(item.id)}
-                                                className="hover:text-[#FFA726] text-black"
+                                                className="hover:text-black text-[#FFA726] transition-colors duration-300"
                                             >
                                                 <FontAwesomeIcon icon={faTrash}/>
                                             </button>
@@ -144,7 +144,7 @@ function Cart() {
                         <div className="col-span-1">
                             <div className="flex flex-col space-y-4">
                                 <button
-                                    className="w-full bg-black  py-2 rounded text-[#FFA726] font-bold hover:bg-[#FFA726] hover:text-black transition-colors duration-300">
+                                    className="w-full bg-[#FFA726]  py-2 rounded text-black font-bold hover:bg-black hover:text-[#FFA726] transition-colors duration-300">
                                     Tiếp tục mua hàng
                                 </button>
                             </div>
@@ -158,7 +158,7 @@ function Cart() {
                                         placeholder="Mã giảm giá"
                                     />
                                     <button
-                                        className="bg-black text-[#FFA726] font-bold py-2 px-6 rounded hover:bg-[#FFA726] hover:text-black transition-colors duration-300">
+                                        className="bg-[#FFA726] text-black font-bold py-2 px-6 rounded hover:bg-black hover:text-[#FFA726] transition-colors duration-300">
                                         Áp dụng mã giảm
                                     </button>
                                 </div>
@@ -175,8 +175,7 @@ function Cart() {
                                 </span>
                             </div>
                             <button
-                                className="w-full mt-4 bg-black hover:bg-[#FFA726] text-[#FFA726] font-bold hover:text-black py-3 rounded transition-colors duration-300"
-                            >
+                                className="w-full mt-4 bg-[#FFA726] hover:bg-black text-black font-bold hover:text-[#FFA726] py-3 rounded transition-colors duration-300">
                                 Tiến hành thanh toán
                             </button>
                         </div>

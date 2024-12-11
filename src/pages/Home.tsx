@@ -9,6 +9,7 @@ import product_item3 from "../assets/img/product-item3.jpg";
 import product_item4 from "../assets/img/product-item4.jpg";
 import product_item5 from "../assets/img/product-item5.jpg";
 import product_item6 from "../assets/img/product-item6.jpg";
+import {useEffect} from "react";
 
 function Home() {
     const cards = [
@@ -37,6 +38,14 @@ function Home() {
             src: product_item6
         },
     ];
+
+    function scrollToTop() {
+        window.scrollTo(0, 0);
+    }
+
+    useEffect(() => {
+        scrollToTop();
+    }, []);
 
     return (
         <>
