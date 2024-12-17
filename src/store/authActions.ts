@@ -17,6 +17,7 @@ export const loadAuthFromStorage = () => (dispatch: AppDispatch) => {
 export const logout = () => (dispatch: AppDispatch) => {
     dispatch(clearAccessToken());
     dispatch(clearUser());
-
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    localStorage.removeItem('quantityCart')
 };

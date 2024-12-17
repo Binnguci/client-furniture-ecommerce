@@ -64,6 +64,7 @@ export default function SignIn() {
             console.log('Data sent successfully:', response.data);
             const {accessToken, user} = response.data.result;
             localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('user', JSON.stringify(user));
             dispatch(setAccessToken(accessToken))
             dispatch(setUser(user));
             openNotificationWithIconSuccess()

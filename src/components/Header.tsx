@@ -15,6 +15,7 @@ import axios from "axios";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../store/store.ts";
 import {logout} from "../store/authActions.ts";
+import {fetchCart} from "../store/cart.slice.ts";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -50,8 +51,8 @@ const Header = () => {
     const header = useRef(null);
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useAppDispatch();
-
-
+    const quantityCart = localStorage.getItem('quantityCart');
+    const {cart} = useSelector((state: RootState) => state.cart)
     const handleScroll = () => {
         if (typeof window !== 'undefined') {
             if (window.scrollY > lastScrollY) {
@@ -62,8 +63,16 @@ const Header = () => {
             setLastScrollY(window.scrollY);
         }
     };
+    async function getQuantityCart(){
+        dispatch(fetchCart())
+    }
 
     useEffect(() => {
+        if (!quantityCart){
+            getQuantityCart()
+        }
+        const token = localStorage.getItem('accessToken');
+        setIsLoggedIn(!!token);
         if (typeof window !== 'undefined') {
             window.addEventListener('scroll', handleScroll);
         }
@@ -72,12 +81,8 @@ const Header = () => {
                 window.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [lastScrollY]);
+    }, [lastScrollY, isLoggedIn]);
 
-    useEffect(() => {
-        const token = localStorage.getItem('accessToken');
-        setIsLoggedIn(!!token);
-    }, [isLoggedIn]);
 
 
     const handleToggleMenu = () => {
@@ -220,7 +225,7 @@ const Header = () => {
                         <CustomTooltip title="Giỏ hàng">
                             <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>
                         </CustomTooltip>
-                        <span className="font-bold text-[#FFA726] py-1">5</span>
+                        <span className="font-bold text-[#FFA726] py-1">{cart?.quantity}</span>
                     </Link>
                     {isLoggedIn ? (
                         <PopoverGroup className="hidden lg:flex lg:gap-x-12">

@@ -3,11 +3,11 @@ import { User } from "../types/user.type.ts";
 
 const initialState = {
     user: {
-        id: null,
-        username: null,
-        fullName: null,
-        email: null,
-        phone: null,
+        id: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string).id : null,
+        username: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string).username : null,
+        fullName: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string).fullName : null,
+        email: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string).email : null,
+        phone: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string).phone : null,
     } as User,
     accessToken: null as string | null,
 };

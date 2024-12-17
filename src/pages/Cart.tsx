@@ -1,65 +1,27 @@
 'use strict';
-import {useState} from "react";
+import {useEffect} from "react";
 import HeroBarCart from "../components/HeroBarCart.tsx";
-import product1 from "../assets/img/product-1.png";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/faTrash";
-
-interface CartItem {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-}
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../store/store.ts";
+import {fetchCart} from "../store/cart.slice.ts";
+import {CartItem} from "../types/cartItem.type.ts";
+import {convertCurrencyStringToNumber} from "../utils/convertCurrencyToNumber.ts";
+import {formatCurrencyWithoutSymbol} from "../utils/convertCurrencyToString.ts";
 
 function Cart() {
-    const [cartItems, setCartItems] = useState<CartItem[]>([
-        {
-            id: 1,
-            name: "Product 1",
-            price: 49.0,
-            quantity: 1,
-            image: product1,
-        },
-        {
-            id: 2,
-            name: "Product 2",
-            price: 49.0,
-            quantity: 1,
-            image: product1,
-        },
-    ]);
+    const dispatch = useDispatch<AppDispatch>();
+    const {cart} = useSelector((state: RootState) => state.cart)
+    useEffect(() => {
+        dispatch(fetchCart());
+    }, []);
+    console.log("Gio hang", cart);
 
-    // Hàm tính tổng giá tiền
-    const calculateTotal = (): number => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-    };
-
-    // Hàm xử lý khi nhấn nút tăng số lượng
-    const handleIncrease = (id: number): void => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id ? {...item, quantity: item.quantity + 1} : item
-            )
-        );
-    };
-
-    // Hàm xử lý khi nhấn nút giảm số lượng
-    const handleDecrease = (id: number): void => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id && item.quantity > 1
-                    ? {...item, quantity: item.quantity - 1}
-                    : item
-            )
-        );
-    };
-
-    // Hàm xử lý xóa sản phẩm khỏi giỏ hàng
-    const handleRemove = (id: number): void => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    };
+    function calculateTotal() {
+        const totalPrice: number = cart?.cartItemResponse.reduce((total, item: CartItem) => total + (convertCurrencyStringToNumber(item.productDTO.price) * item.quantity), 0) || 0;
+        return formatCurrencyWithoutSymbol(totalPrice);
+    }
 
     return (
         <div>
@@ -80,28 +42,29 @@ function Cart() {
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {cartItems.map((item) => (
+                                {cart?.cartItemResponse.map((item) => (
                                     <tr className="border-t" key={item.id}>
                                         <td className="px-6 py-4">
                                             <img
-                                                src={item.image}
+                                                src={item.productDTO.images[0].imageUrl}
                                                 alt="Image"
                                                 className="w-20 h-auto"
                                             />
                                         </td>
                                         <td className="px-6 py-4">
                                             <h2 className="text-gray-800 font-medium">
-                                                {item.name}
+                                                {item.productDTO.name}
                                             </h2>
                                         </td>
                                         <td className="px-6 py-4 text-gray-800">
-                                            ${item.price.toFixed(2)}
+                                            {item.productDTO.price}
                                         </td>
                                         <td className="px-6 py-4">
                                             <div className="flex items-center space-x-2">
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleDecrease(item.id)}
+                                                    onClick={() => {
+                                                    }}
                                                     className="px-2 py-1 bg-[#FFA726] text-black  border  rounded"
                                                 >
                                                     -
@@ -114,7 +77,7 @@ function Cart() {
                                                 />
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleIncrease(item.id)}
+                                                    onClick={() => (item.id)}
                                                     className="px-2 py-1  bg-[#FFA726] text-black border  rounded"
                                                 >
                                                     +
@@ -122,12 +85,12 @@ function Cart() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 text-gray-800">
-                                            ${(item.price * item.quantity).toFixed(2)}
+                                            {formatCurrencyWithoutSymbol(convertCurrencyStringToNumber(item.productDTO.price) * item.quantity)}
                                         </td>
                                         <td className="px-12 py-4">
                                             <button
                                                 type="button"
-                                                onClick={() => handleRemove(item.id)}
+                                                onClick={() => (item.id)}
                                                 className="hover:text-black text-[#FFA726] transition-colors duration-300"
                                             >
                                                 <FontAwesomeIcon icon={faTrash}/>
@@ -171,7 +134,7 @@ function Cart() {
                             <div className="flex justify-between py-4">
                                 <span className="text-black">Total</span>
                                 <span className="font-medium text-gray-800">
-                                    ${calculateTotal().toFixed(2)}
+                                    {calculateTotal()}
                                 </span>
                             </div>
                             <button
