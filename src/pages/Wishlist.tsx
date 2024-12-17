@@ -2,23 +2,22 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import HerobarWishlist from "../components/HerobarWishlist.tsx";
 import ProductCard from "../components/ProductCard.tsx";
-import { useUser } from "../context/user.context.tsx";
 import {fetchWishlist} from "../store/wishlist.slice.ts";
-import { showProductInWishlist } from "../store/product.wishlist.slice.ts";
 import type { AppDispatch, RootState } from "../store/store.ts";
 
 const useAppDispatch: () => AppDispatch = useDispatch;
 
 function Wishlist() {
-    const { user } = useUser();
-    const email = user?.email;
     const dispatch = useAppDispatch();
-    const wishlistProducts = useSelector((state: RootState) => state.productWishlist.items);
+    const wishlistProducts = useSelector((state: RootState) => state.wishList.items);
 
+    function scrollTop(){
+        window.scrollTo(0,0);
+    }
     useEffect(() => {
-        dispatch(showProductInWishlist());
+        scrollTop();
         dispatch(fetchWishlist());
-    }, [dispatch, email]);
+    }, [dispatch]);
 
     return (
         <div>
@@ -43,6 +42,7 @@ function Wishlist() {
                                 name={product.name}
                                 price={product.price}
                                 id={product.id}
+                                isFavorite={true}
                             />
                         ))}
                     </div>

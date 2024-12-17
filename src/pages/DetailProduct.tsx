@@ -12,6 +12,8 @@ import {styled} from "@mui/material/styles";
 import {Tooltip, tooltipClasses, TooltipProps} from "@mui/material";
 import RatingSummary from "../components/ReactSumary.tsx";
 import {notification} from "antd";
+import {useAppDispatch} from "../store/store.ts";
+import {addProductIntoCart} from "../store/cart.slice.ts";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -33,6 +35,7 @@ function DetailProduct() {
     const [tabValue, setTabValue] = useState("details");
     const productPlaceholder = "https://via.placeholder.com/400";
     const [api, contextHolder] = notification.useNotification();
+    const dispatch = useAppDispatch();
 
     function scrollToTop() {
         window.scrollTo(0, 0);
@@ -51,36 +54,26 @@ function DetailProduct() {
         })();
     }, [id]);
 
-    const handleIncrease = () => {
-        console.log("tang")
-        setQuantity((prevQuantity) => {
-            if (prevQuantity < (product?.stock || 0)) {
-                return prevQuantity + 1;
-            }
-            return prevQuantity;
-        });
-    };
-
-    const handleDecrease = () => {
-        console.log("giam")
-        setQuantity((prevQuantity) => {
-            if (prevQuantity > 1) {
-                return prevQuantity - 1;
-            }
-            return prevQuantity;
-        });
-    };
-
 
     const handleAddToCart = () => {
         if (product) {
-            // dispatch(addProductToCart({productId: product.id, quantity}));
+            dispatch(addProductIntoCart({productID: product.id, quantity}));
             api.success({
                 message: 'Đã thêm sản phẩm vào giỏ hàng',
             });
 
         }
     };
+
+    const handleIncreaseQuantity = () => {
+        setQuantity(quantity + 1);
+    }
+
+    const handleDecreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    }
 
     const handleTabChange = (_: SyntheticEvent, newValue: string) => {
         setTabValue(newValue);
@@ -118,14 +111,14 @@ function DetailProduct() {
 
                     <div className="flex items-center space-x-4">
                         <div className="flex items-center border border-gray-300 rounded">
-                            <button onClick={handleDecrease} className="px-2 py-1 text-gray-700">-</button>
+                            <button onClick={handleDecreaseQuantity} className="px-2 py-1 text-gray-700">-</button>
                             <input
                                 type="text"
                                 value={quantity}
                                 className="w-8 text-center border-none outline-none"
                                 readOnly
                             />
-                            <button onClick={handleIncrease} className="px-2 py-1 text-gray-700">+</button>
+                            <button onClick={handleIncreaseQuantity} className="px-2 py-1 text-gray-700">+</button>
                         </div>
 
                         <button onClick={handleAddToCart}

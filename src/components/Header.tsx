@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import Logo from "./logo.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -47,32 +47,27 @@ const Header = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
     const [isVisible, setIsVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
     const header = useRef(null);
     const user = useSelector((state: RootState) => state.auth.user);
     const dispatch = useAppDispatch();
-    const quantityCart = localStorage.getItem('quantityCart');
     const {cart} = useSelector((state: RootState) => state.cart)
-    const handleScroll = () => {
-        if (typeof window !== 'undefined') {
-            if (window.scrollY > lastScrollY) {
-                setIsVisible(false);
-            } else {
-                setIsVisible(true);
-            }
-            setLastScrollY(window.scrollY);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    const handleScroll = useCallback(() => {
+        if (window.scrollY > lastScrollY) {
+            setIsVisible(false);
+        } else {
+            setIsVisible(true);
         }
-    };
-    async function getQuantityCart(){
-        dispatch(fetchCart())
-    }
+        setLastScrollY(window.scrollY);
+    }, [lastScrollY]);
 
     useEffect(() => {
-        if (!quantityCart){
-            getQuantityCart()
-        }
         const token = localStorage.getItem('accessToken');
         setIsLoggedIn(!!token);
+        if (cart == null){
+            dispatch(fetchCart())
+        }
         if (typeof window !== 'undefined') {
             window.addEventListener('scroll', handleScroll);
         }
@@ -81,8 +76,7 @@ const Header = () => {
                 window.removeEventListener('scroll', handleScroll);
             }
         };
-    }, [lastScrollY, isLoggedIn]);
-
+    }, [handleScroll]);
 
 
     const handleToggleMenu = () => {
@@ -225,7 +219,7 @@ const Header = () => {
                         <CustomTooltip title="Giỏ hàng">
                             <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>
                         </CustomTooltip>
-                        <span className="font-bold text-[#FFA726] py-1">{cart?.quantity}</span>
+                        <span className="font-bold text-[#FFA726] py-1">{cart?.quantity || 0}</span>
                     </Link>
                     {isLoggedIn ? (
                         <PopoverGroup className="hidden lg:flex lg:gap-x-12">

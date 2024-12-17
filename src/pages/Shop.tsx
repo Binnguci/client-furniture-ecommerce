@@ -2,10 +2,13 @@ import {useEffect, useState} from "react";
 import HeroBarShop from "../components/HerobarShop.tsx";
 import ProductCard from "../components/ProductCard.tsx";
 import Pagination from "../components/Pagination.tsx";
-import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/react";
-import {ChevronDownIcon, MinusIcon, PlusIcon} from "@heroicons/react/20/solid";
+import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/react";
+import {ChevronDownIcon, MinusIcon} from "@heroicons/react/20/solid";
 import http from "../utils/http.ts";
 import {Product} from "../types/product.type.ts";
+import {useSelector} from "react-redux";
+import {RootState, useAppDispatch} from "../store/store.ts";
+import {fetchWishlist} from "../store/wishlist.slice.ts";
 
 const sortOptions = [
     {name: 'Sản phẩm mới', href: '#', current: false},
@@ -69,8 +72,18 @@ function Shop() {
     const itemsPerPage = 9;
 
     const [products, setProducts] = useState<Product[]>([]);
+    const wishlist: Product[] = useSelector((state: RootState): Product[] => state.wishList.items);
+    const dispatch = useAppDispatch();
+
+    function scrollTop() {
+        window.scrollTo(0, 0);
+    }
 
     useEffect(() => {
+        scrollTop();
+        if (wishlist.length === 0) {
+            dispatch(fetchWishlist());
+        }
         (async () => {
             try {
                 const response = await http.get("/product");
@@ -139,19 +152,17 @@ function Shop() {
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                             <form className="hidden lg:block">
                                 {filters.map((section) => (
-                                    <Disclosure key={section.id} as="div" className="border-b border-gray-200 py-6">
+                                    <div key={section.id} className="border-b border-gray-200 py-6">
                                         <h3 className="-my-3 flow-root">
-                                            <DisclosureButton
+                                            <div
                                                 className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
                                                 <span className="font-medium text-black">{section.name}</span>
                                                 <span className="ml-6 flex items-center">
-                          <PlusIcon aria-hidden="true" className="size-5 group-data-[open]:hidden text-black"/>
-                          <MinusIcon aria-hidden="true"
-                                     className="size-5 group-[&:not([data-open])]:hidden text-black"/>
-                        </span>
-                                            </DisclosureButton>
+            <MinusIcon aria-hidden="true" className="size-5 text-black"/>
+          </span>
+                                            </div>
                                         </h3>
-                                        <DisclosurePanel className="pt-6">
+                                        <div className="pt-6">
                                             <div className="space-y-4">
                                                 {section.options.map((option, optionIdx) => (
                                                     <div key={option.value} className="flex gap-3">
@@ -194,10 +205,11 @@ function Shop() {
                                                     </div>
                                                 ))}
                                             </div>
-                                        </DisclosurePanel>
-                                    </Disclosure>
+                                        </div>
+                                    </div>
                                 ))}
                             </form>
+
                             <div className="lg:col-span-3">
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {displayedProducts.map((product, index) => (

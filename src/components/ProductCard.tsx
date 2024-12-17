@@ -4,11 +4,11 @@ import {faHeart as faHeartOutline} from "@fortawesome/free-regular-svg-icons";
 import {faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
 import {styled} from "@mui/material/styles";
 import {Tooltip, tooltipClasses, TooltipProps} from "@mui/material";
-import {useEffect} from "react";
 import type {AppDispatch, RootState} from "../store/store.ts";
-import {fetchWishlist, toggleWishlist} from "../store/wishlist.slice.ts";
+import {toggleWishlist} from "../store/wishlist.slice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {notification} from "antd";
+import {Product} from "../types/product.type.ts";
 
 const useAppDispatch: () => AppDispatch = useDispatch;
 
@@ -17,6 +17,7 @@ interface ProductCardProps {
     name: string;
     price: string;
     id: number;
+    isFavorite?: boolean;
 }
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
@@ -33,15 +34,10 @@ const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
 
 function ProductCard({img, name, price, id}: ProductCardProps) {
     const dispatch = useAppDispatch();
-    const wishlist: number[] = useSelector((state: RootState): number[] => state.wishList.items);
+    const wishlist: Product[] = useSelector((state: RootState): Product[]  => state.wishList.items);
     const [api, contextHolder] = notification.useNotification();
 
-    useEffect((): void => {
-        dispatch(fetchWishlist());
-    }, [dispatch]);
-
-
-    const isFavorite = wishlist.includes(id);
+    const isFavorite = wishlist.some((item) => item.id === id);
 
     const toggleFavorite = (): void => {
         dispatch(toggleWishlist({productID: id, isFavorite}));
@@ -55,8 +51,6 @@ function ProductCard({img, name, price, id}: ProductCardProps) {
             });
         }
     };
-    console.log(wishlist);
-
 
     return (
         <div className="w-[250px] mx-auto relative">

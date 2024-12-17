@@ -1,5 +1,4 @@
-// authActions.ts
-import { AppDispatch } from './store';
+import {AppDispatch} from './store';
 import {clearAccessToken, clearUser, setAccessToken, setUser} from "./auth.slice.ts";
 
 export const loadAuthFromStorage = () => (dispatch: AppDispatch) => {
