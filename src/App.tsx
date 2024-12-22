@@ -21,6 +21,7 @@ import WithoutHeaderLayout from "./layout/WithoutHeaderLayout.tsx";
 import {useEffect} from "react";
 import {loadAuthFromStorage} from "./store/authActions.ts";
 import {useAppDispatch} from "./store/store.ts";
+import Checkout from "./pages/Checkout.tsx";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ function App() {
                         <Route path={"/cart"} element={<Cart/>}/>
                         <Route path={"/wishlist"} element={<Wishlist/>}/>
                         <Route path={"/about"} element={<AboutUs/>}/>
+                        <Route path={"/payment"} element={<Checkout/>}/>
                     </Route>
                     <Route element={<WithoutHeaderLayout/>}>
                         <Route path={"/sign-up"} element={<Register/>}/>

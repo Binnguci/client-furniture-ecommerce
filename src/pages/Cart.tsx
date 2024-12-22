@@ -13,8 +13,8 @@ import {
 import {CartItem} from "../types/cartItem.type.ts";
 import {convertCurrencyStringToNumber} from "../utils/convertCurrencyToNumber.ts";
 import {formatCurrencyWithoutSymbol} from "../utils/convertCurrencyToString.ts";
-import {Button} from "antd";
 import {Link} from "react-router-dom";
+import EmptyCart from "../components/EmptyCart.tsx";
 
 function Cart() {
     const dispatch = useDispatch<AppDispatch>();
@@ -117,13 +117,8 @@ function Cart() {
                                                     />
                                                     <button
                                                         type="button"
-                                                        onClick={() =>
-                                                            handleIncrease(
-                                                                item.productDTO.id
-                                                            )
-                                                        }
-                                                        className="px-2 py-1 bg-[#FFA726] text-black border rounded"
-                                                    >
+                                                        onClick={() => handleIncrease(item.productDTO.id)}
+                                                        className="px-2 py-1 bg-[#FFA726] text-black border rounded">
                                                         +
                                                     </button>
                                                 </div>
@@ -138,11 +133,8 @@ function Cart() {
                                             <td className="px-12 py-4">
                                                 <button
                                                     type="button"
-                                                    onClick={() =>
-                                                        handleRemoveCartItem(item.productDTO.id)
-                                                    }
-                                                    className="hover:text-black text-[#FFA726] transition-colors duration-300"
-                                                >
+                                                    onClick={() => handleRemoveCartItem(item.productDTO.id)}
+                                                    className="hover:text-black text-[#FFA726] transition-colors duration-300">
                                                     <FontAwesomeIcon icon={faTrash}/>
                                                 </button>
                                             </td>
@@ -165,31 +157,18 @@ function Cart() {
                                         {calculateTotal()}
                                     </span>
                                 </div>
-                                <button
-                                    className="w-full mt-4 bg-[#FFA726] hover:bg-black text-black font-bold hover:text-[#FFA726] py-3 rounded transition-colors duration-300">
-                                    Tiến hành thanh toán
-                                </button>
+                                <Link to={"/payment"}>
+                                    <button
+                                        className="w-full mt-4 bg-[#FFA726] hover:bg-black text-black font-bold hover:text-[#FFA726] py-3 rounded transition-colors duration-300">
+                                        Tiến hành thanh toán
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>
                 </div>
             ) : (
-                <div className="text-center py-16">
-                    <div className="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
-                        <h3 className="font-heading mb-4 font-bold text-[#FFA726] tracking-tight dark:text-white text-4xl">
-                            Giỏ hàng của bạn đang trống
-                        </h3>
-                        <div className="w-[20rem] h-[3px] bg-[#FFA726] mx-auto my-4"></div>
-                        <Link to={"/products"}>
-                            <Button
-                                className="bg-[#FFA726] font-bold hover:!bg-black hover:!text-[#FFA326] border-none">Cửa
-                                hàng</Button>
-                        </Link>
-                    </div>
-                    <p className="text-gray-500 mt-4">
-                        Hãy tiếp tục mua sắm để thêm sản phẩm vào giỏ hàng!
-                    </p>
-                </div>
+                <EmptyCart/>
             )}
         </div>
     );

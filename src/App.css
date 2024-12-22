@@ -59,3 +59,33 @@ body::-webkit-scrollbar {
     grid-row: 6 / span 27;
     padding-top: 20px;
 }
+
+.custom-steps .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #FFA726 !important; /* Cam sáng cho bước đã hoàn thành */
+    color: white !important; /* Văn bản trắng */
+    border-color: #FFA726 !important;
+}
+
+.custom-steps .ant-steps-item-process .ant-steps-item-icon {
+    background-color: #FFA726 !important; /* Cam sáng cho bước hiện tại */
+    color: white !important; /* Văn bản trắng */
+    border-color: #FFA726 !important;
+}
+
+.custom-steps .ant-steps-item-process .ant-steps-item-title {
+    color: black !important; /* Tiêu đề bước hiện tại là màu đen */
+    font-weight: bold; /* Làm nổi bật tiêu đề */
+}
+
+.custom-steps .ant-steps-item-wait .ant-steps-item-icon {
+    background-color: white !important; /* Bước chờ giữ nền trắng */
+    color: black; /* Biểu tượng đen */
+    border-color: #FFA726 !important; /* Viền cam sáng */
+}
+
+.custom-steps .ant-steps-item-wait .ant-steps-item-title {
+    color: black !important; /* Tiêu đề màu đen */
+    opacity: 0.7; /* Làm mờ nhẹ để ít nổi bật hơn */
+}
+
+

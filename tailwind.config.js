@@ -63,7 +63,6 @@ module.exports = {
     }
   },
   plugins: [
-    // rest of the code
     addVariablesForColors,
   ],
 };
@@ -72,15 +71,14 @@ function addVariablesForColors({ addBase, theme }) {
   const allColors = theme("colors");
   const flattenColors = Object.entries(allColors).reduce((acc, [key, value]) => {
     if (typeof value === "string") {
-      acc[`--${key}`] = value; // Nếu giá trị là chuỗi
+      acc[`--${key}`] = value;
     } else if (typeof value === "object" && value !== null) {
       Object.entries(value).forEach(([subKey, subValue]) => {
-        acc[`--${key}-${subKey}`] = subValue; // Xử lý nested màu
+        acc[`--${key}-${subKey}`] = subValue;
       });
     }
     return acc;
   }, {});
-
   addBase({
     ":root": flattenColors,
   });
