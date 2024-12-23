@@ -7,13 +7,16 @@ import {useParams} from "react-router-dom";
 import {Product} from "../types/product.type.ts";
 import http from "../utils/http.ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faHeart} from "@fortawesome/free-solid-svg-icons";
+import {faHeart as faHeartOutline} from "@fortawesome/free-regular-svg-icons";
+import {faHeart as faHeartSolid} from "@fortawesome/free-solid-svg-icons";
 import {styled} from "@mui/material/styles";
 import {Tooltip, tooltipClasses, TooltipProps} from "@mui/material";
 import RatingSummary from "../components/ReactSumary.tsx";
 import {notification} from "antd";
-import {useAppDispatch} from "../store/store.ts";
+import {type RootState, useAppDispatch} from "../store/store.ts";
 import {addProductIntoCart} from "../store/cart.slice.ts";
+import {toggleWishlist} from "../store/wishlist.slice.ts";
+import {useSelector} from "react-redux";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -29,6 +32,7 @@ const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
 
 function DetailProduct() {
     const {id} = useParams<{ id: string }>();
+    const productID = Number(id);
     const [product, setProduct] = useState<Product | undefined>(undefined);
     const [quantity, setQuantity] = useState(1);
     const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
@@ -36,6 +40,7 @@ function DetailProduct() {
     const productPlaceholder = "https://via.placeholder.com/400";
     const [api, contextHolder] = notification.useNotification();
     const dispatch = useAppDispatch();
+    const wishlist: Product[] = useSelector((state: RootState): Product[]  => state.wishList.items);
 
     function scrollToTop() {
         window.scrollTo(0, 0);
@@ -53,6 +58,21 @@ function DetailProduct() {
             }
         })();
     }, [id]);
+
+    const isFavorite = wishlist.some((item) => item.id === productID);
+
+    const toggleFavorite = (): void => {
+        dispatch(toggleWishlist({productID: productID, isFavorite}));
+        if (isFavorite) {
+            api.warning({
+                message: 'Đã hủy yêu thích sản phẩm',
+            });
+        } else {
+            api.success({
+                message: 'Đã thêm sản phẩm vào yêu thích',
+            });
+        }
+    };
 
 
     const handleAddToCart = () => {
@@ -125,12 +145,21 @@ function DetailProduct() {
                                 className="px-4 py-1 bg-[#FFA726] text-black rounded hover:bg-black hover:text-[#FFA726] font-bold transition-colors duration-300">
                             Thêm vào giỏ hàng
                         </button>
-                        <CustomTooltip title="Thêm vào yêu thích">
-                            <button
-                                className="px-4 py-1 bg-[#FFA726] text-black  rounded  font-bold transition-colors duration-300">
-                                <FontAwesomeIcon icon={faHeart}/>
-                            </button>
-                        </CustomTooltip>
+                        {isFavorite ? (
+                            <CustomTooltip title={"Hủy yêu thích"} placement="top">
+                                <button onClick={toggleFavorite}
+                                    className="px-4 py-1 bg-[#FFA726] text-black  rounded  font-bold transition-colors duration-300">
+                                    <FontAwesomeIcon icon={faHeartSolid}/>
+                                </button>
+                            </CustomTooltip>
+                        ) : (
+                            <CustomTooltip title={"Thêm vào yêu thích"} placement="top">
+                                <button onClick={toggleFavorite}
+                                    className="px-4 py-1 bg-[#FFA726] text-black  rounded  font-bold transition-colors duration-300">
+                                    <FontAwesomeIcon icon={faHeartOutline}/>
+                                </button>
+                            </CustomTooltip>
+                        )}
                     </div>
                     <div>
 
@@ -152,12 +181,8 @@ function DetailProduct() {
                     }}
                 >
                     <Tab value="details" label="Chi tiết" sx={{
-                        "&.Mui-selected": {color: "#FFA726", fontWeight: "bold"},
-                    }}/>
-                    <Tab value="review" label="Đánh giá" sx={{
-                        "&.Mui-selected": {color: "#FFA726", fontWeight: "bold"},
-                    }}/>
-
+                        "&.Mui-selected": {color: "#FFA726", fontWeight: "bold"},}}/>
+                    <Tab value="review" label="Đánh giá" sx={{"&.Mui-selected": {color: "#FFA726", fontWeight: "bold"},}}/>
                 </Tabs>
             </Box>
             {tabValue === "details" && (
@@ -172,7 +197,10 @@ function DetailProduct() {
             )}
             {tabValue === "review" && (
                 <Box>
-                    <Reviews reviews={product?.reviewDTO || []}/>
+                    {product?.id && (
+                        <Reviews reviews={product?.reviewDTO || []} productID={product.id} />
+                    )}
+
                 </Box>
             )}
 

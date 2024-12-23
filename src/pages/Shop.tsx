@@ -4,11 +4,11 @@ import ProductCard from "../components/ProductCard.tsx";
 import Pagination from "../components/Pagination.tsx";
 import {Menu, MenuButton, MenuItem, MenuItems} from "@headlessui/react";
 import {ChevronDownIcon, MinusIcon} from "@heroicons/react/20/solid";
-import http from "../utils/http.ts";
 import {Product} from "../types/product.type.ts";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../store/store.ts";
 import {fetchWishlist} from "../store/wishlist.slice.ts";
+import {fetchProducts, searchProducts} from "../store/product.slice.ts";
 
 const sortOptions = [
     {name: 'Sản phẩm mới', href: '#', current: false},
@@ -19,7 +19,7 @@ const sortOptions = [
 
 const filters = [
     {
-        id: 'color',
+        id: 'supplier',
         name: 'Nhà cung cấp',
         options: [
             {value: 'IKEA', label: 'IKEA', checked: false},
@@ -37,7 +37,7 @@ const filters = [
         options: [
             {value: 'Ghế', label: 'Ghế', checked: false},
             {value: 'Bàn', label: 'Bàn', checked: false},
-            {value: 'Tủ', label: 'Tủ', checked: true},
+            {value: 'Tủ', label: 'Tủ', checked: false},
             {value: 'Chén', label: 'Chén', checked: false},
             {value: 'Dĩa', label: 'Dĩa', checked: false},
             {value: 'Giường', label: 'Giường', checked: false},
@@ -50,7 +50,7 @@ const filters = [
         ],
     },
     {
-        id: 'size',
+        id: 'price',
         name: 'Giá tiền',
         options: [
             {value: '2l', label: '< 5.000.000 VND', checked: false},
@@ -70,29 +70,44 @@ function classNames(...classes: (string | undefined | null | boolean)[]): string
 function Shop() {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
-
-    const [products, setProducts] = useState<Product[]>([]);
     const wishlist: Product[] = useSelector((state: RootState): Product[] => state.wishList.items);
     const dispatch = useAppDispatch();
+    const products:Product[] = useSelector((state: RootState) => state.product.products);
+    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
 
     function scrollTop() {
         window.scrollTo(0, 0);
     }
+    const handleFilterChange = (sectionId: string, value: string, checked: boolean) => {
+        setSelectedFilters((prevFilters) => {
+            const sectionFilters = prevFilters[sectionId] || [];
+
+            if (checked) {
+                return {
+                    ...prevFilters,
+                    [sectionId]: [...sectionFilters, value],
+                };
+            } else {
+                return {
+                    ...prevFilters,
+                    [sectionId]: sectionFilters.filter((item) => item !== value),
+                };
+            }
+        });
+    };
+
 
     useEffect(() => {
         scrollTop();
         if (wishlist.length === 0) {
             dispatch(fetchWishlist());
         }
-        (async () => {
-            try {
-                const response = await http.get("/product");
-                setProducts(response.data.result);
-            } catch (error) {
-                console.error("Error fetching products:", error);
-            }
-        })();
-    }, []);
+        if (products.length === 0){
+            dispatch(fetchProducts())
+        }
+        console.log("Filters Updated:", selectedFilters);
+        dispatch(searchProducts({ filters: selectedFilters }));
+    }, [selectedFilters, dispatch]);
 
 
     const totalPages: number = products ? Math.ceil(products.length / itemsPerPage) : 1;
@@ -173,6 +188,7 @@ function Shop() {
                                                                     defaultChecked={option.checked}
                                                                     id={`filter-${section.id}-${optionIdx}`}
                                                                     name={`${section.id}[]`}
+                                                                    onChange={(e) => handleFilterChange(section.id, option.value, e.target.checked)}
                                                                     type="checkbox"
                                                                     className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-[#FFA726] checked:bg-[#FFA726]"
                                                                 />

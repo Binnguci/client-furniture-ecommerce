@@ -1,25 +1,18 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Pagination from "./Pagination.tsx";
 import {ReviewItem} from "./ReviewItem.tsx";
 import {Review} from "../types/review.type.ts";
 import Rating from "react-rating-stars-component";
+import {useAppDispatch} from "../store/store.ts";
+import {createReview} from "../store/review.slice.ts";
+import {createAsyncThunk} from "@reduxjs/toolkit";
+import http from "../utils/http.ts";
+import {AxiosError} from "axios";
 
 
-function Reviews({reviews}: { reviews: Review[] }) {
+function Reviews({reviews, productID}: { reviews: Review[], productID: number}) {
     const [_, setReviews] = useState(reviews);
-    // const currentProductCategory = "furniture";
-    // const filteredProducts = relatedProducts.filter(
-    //     (product) => product.category === currentProductCategory
-    // );
-
-    // const descriptions = [
-    //     "Rất không hài lòng",
-    //     "Không hài lòng",
-    //     "Tốt",
-    //     "Hài lòng",
-    //     "Rất hài lòng"
-    // ];
-
+    const dispatch = useAppDispatch();
     const reviewsPerPage = 3;
     const totalPages = Math.ceil(reviews.length / reviewsPerPage);
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,39 +26,54 @@ function Reviews({reviews}: { reviews: Review[] }) {
         currentPage * reviewsPerPage
     );
 
+    const getReview = createAsyncThunk<
+        Review,
+        { id: number },
+        { rejectValue: string }
+    >(
+        "review/getReview",
+        async ({ id }, { rejectWithValue}) => {
+            try {
+                const response = await http.get(`/review/${id}`);
+                console.log(response.data);
+                return response.data;
+            } catch (error) {
+                const err = error as AxiosError;
+                return rejectWithValue(err.response?.data as string || "Failed to fetch review");
+            }
+        }
+    );
+
     const [userComment, setUserComment] = useState("");
     const [userRating, setUserRating] = useState(0);
 
+    useEffect(() => {
+
+    }, []);
+
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const reviewData = {
+            comment: userComment,
+            rating: userRating,
+            productID: productID,
+        };
+        dispatch(createReview(reviewData))
+        dispatch(getReview({id: productID}));
+    };
 
     return (
         <div className="container mx-auto py-8">
             <div className="grid grid-cols-3 gap-6 py-6">
                 <div className="col-span-2">
                     <h3 className="text-xl font-bold mb-4">Thêm đánh giá của bạn</h3>
-                    <form
-                        className="flex flex-col gap-4 mb-6"
-                        onSubmit={(e): void => {
-                            e.preventDefault();
-                            const newReview = {
-                                id: reviews.length + 1,
-                                username: "Thành viên ẩn danh",
-                                rating: userRating,
-                                comment: userComment,
-                                date: new Date().toISOString().split("T")[0],
-                                images: [],
-                                isPurchased: false,
-                                updatedAt: "",
-                                likes: 0,
-                            };
-                            setReviews((prev: Review[]) => [newReview, ...prev]);
-                            setUserRating(0);
-                            setUserComment("");
-                        }}
-                    >
+                    <form className="flex flex-col gap-4 mb-6" onSubmit={handleSubmit}>
                         <div>
                             <label className="block mb-2 text-gray-700 font-medium">Xếp hạng</label>
                             <Rating
-                                count={5}
+                                count={5}w
                                 value={userRating}
                                 onChange={setUserRating}
                                 size={24}
@@ -82,13 +90,14 @@ function Reviews({reviews}: { reviews: Review[] }) {
                                 required
                             />
                         </div>
-
                         <button
                             type="submit"
-                            className="w-1/6 px-4 py-2 bg-[#FFA726] text-black font-bold rounded hover:bg-black hover:text-[#FFA726] transition-colors duration-300">
+                            className="w-1/6 px-4 py-2 bg-[#FFA726] text-black font-bold rounded hover:bg-black hover:text-[#FFA726] transition-colors duration-300"
+                        >
                             Gửi đánh giá
                         </button>
                     </form>
+
 
                     {currentReviews.map((review) => (
                         <ReviewItem key={review.id} {...review} setReviews={setReviews}/>
@@ -100,35 +109,6 @@ function Reviews({reviews}: { reviews: Review[] }) {
                             onPageChange={handlePageChange}/>
                     )}
                 </div>
-                {/*<div className="col-span-1 bg-gray-100 rounded overflow-auto">
-                    <div className={"flex bg-[#FFA726] py-1 px-2 justify-between items-center"}>
-                        <h3 className="text-lg font-bold mb-4">Có thể bạn sẽ thích</h3>
-                    </div>
-                    <div className="flex flex-col gap-4 p-4">
-                        {filteredProducts.map((product) => (
-                            <div
-                                key={product.id}
-                                className="flex items-center gap-4 border p-4 rounded shadow bg-white">
-                                <div className="w-32 h-32 flex-shrink-0">
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-full object-cover rounded"/>
-                                </div>
-                                <div className="flex-grow">
-                                    <h4 className="font-semibold text-lg">{product.name}</h4>
-                                    <p className="text-sm text-gray-500">
-                                        Giá: {product.price.toLocaleString()}₫
-                                    </p>
-                                    <button
-                                        className="mt-2 px-4 py-2 bg-[#FFA726] text-black rounded hover:bg-black hover:text-[#FFA726] font-bold">
-                                        Xem chi tiết
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>*/}
             </div>
         </div>
     );

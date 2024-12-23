@@ -20,7 +20,12 @@ function Cart() {
     const dispatch = useDispatch<AppDispatch>();
     const {cart} = useSelector((state: RootState) => state.cart);
 
+    function scrollTop(){
+        window.scrollTo(0, 0);
+    }
+
     useEffect(() => {
+        scrollTop()
         dispatch(fetchCart());
     }, []);
 

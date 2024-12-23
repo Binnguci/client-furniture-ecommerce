@@ -2,6 +2,8 @@ import { Form, Input, Select} from "antd";
 import {OrderFormType} from "../types/orderForm.type.ts";
 import {useState, useEffect} from "react";
 import axios from "axios";
+import {RootState} from "../store/store.ts";
+import {useSelector} from "react-redux";
 
 interface AddressItem {
     id: number;
@@ -9,6 +11,7 @@ interface AddressItem {
 }
 function FormInformationCheckout() {
     const [form] = Form.useForm();
+    const {user} = useSelector((state: RootState) => state.auth);
     const [provinces, setProvinces] = useState<AddressItem[]>([]);
     const [districts, setDistricts] = useState<AddressItem[]>([]);
     const [wards, setWards] = useState<AddressItem[]>([]);
@@ -49,6 +52,15 @@ function FormInformationCheckout() {
                 console.error("Error fetching wards:", error);
             });
     };
+
+    useEffect(() => {
+        if (user) {
+            form.setFieldsValue({
+                name: user.fullName || "",
+                phone: user.phone || "",
+            });
+        }
+    }, [user, form]);
 
 
     const onFinish = (values: OrderFormType) => {
@@ -126,18 +138,6 @@ function FormInformationCheckout() {
                     </Form.Item>
                 </div>
                 <div className="flex space-x-4">
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        className="w-1/2"
-                        rules={[
-                            {required: true, message: "Email là bắt buộc"},
-                            {type: "email", message: "Email không hợp lệ"},
-                        ]}
-                    >
-                        <Input placeholder="Ví dụ: thanhbinh2757@gmail"/>
-                    </Form.Item>
-
                     <Form.Item
                         label="Số điện thoại"
                         name="phone"

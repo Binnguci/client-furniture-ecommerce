@@ -6,7 +6,6 @@ import {faCartShopping, faHeart, faUser} from '@fortawesome/free-solid-svg-icons
 import {Tooltip, tooltipClasses, TooltipProps} from "@mui/material";
 import {styled} from '@mui/material/styles';
 import {Popover, PopoverButton, PopoverGroup, PopoverPanel} from "@headlessui/react";
-import {ChevronDownIcon} from "lucide-react";
 import {faArrowRightFromBracket} from "@fortawesome/free-solid-svg-icons/faArrowRightFromBracket";
 import {faCircleInfo} from "@fortawesome/free-solid-svg-icons/faCircleInfo";
 import {faBagShopping} from "@fortawesome/free-solid-svg-icons/faBagShopping";
@@ -16,6 +15,7 @@ import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../store/store.ts";
 import {logout} from "../store/authActions.ts";
 import {fetchCart} from "../store/cart.slice.ts";
+import MiniCart from "./MiniCart.tsx";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -28,14 +28,6 @@ const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
         fontSize: 11,
     },
 }));
-
-const brands = [
-    {name: 'Décor Walther', href: '#'},
-    {name: 'Ralph Lauren', href: '#'},
-    {name: 'Fürstenberg', href: '#'},
-    {name: 'Saint Louis', href: '#'},
-    {name: 'IKEA', href: '#'},
-]
 
 const accounts = [
     {option: "Thông tin tài khoản", href: "/information-account", icon: faCircleInfo},
@@ -52,17 +44,18 @@ const Header = () => {
         const dispatch = useAppDispatch();
         const {cart} = useSelector((state: RootState) => state.cart)
         const [lastScrollY, setLastScrollY] = useState(0);
+        const [showMiniCart, setShowMiniCart] = useState(false);
 
-    const handleScroll = () => {
-        if (typeof window !== 'undefined') {
-            if (window.scrollY > lastScrollY) {
-                setIsVisible(false);
-            } else {
-                setIsVisible(true);
+        const handleScroll = () => {
+            if (typeof window !== 'undefined') {
+                if (window.scrollY > lastScrollY) {
+                    setIsVisible(false);
+                } else {
+                    setIsVisible(true);
+                }
+                setLastScrollY(window.scrollY);
             }
-            setLastScrollY(window.scrollY);
-        }
-    };
+        };
 
 
         useEffect(() => {
@@ -164,39 +157,39 @@ const Header = () => {
                                 </Link>
 
                             </li>
-                            <li className="max-lg:border-b max-lg:py-3 px-3">
-                                <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-                                    <Popover className="relative">
-                                        <PopoverButton
-                                            className="flex items-center text-white hover:text-[#FFA726] gap-x-1 text-sm font-semibold leading-6 outline-none">
-                                            Thương hiệu
-                                            <ChevronDownIcon aria-hidden="true"
-                                                             className="h-5 w-5 flex-none text-gray-400"/>
-                                        </PopoverButton>
+                            {/*<li className="max-lg:border-b max-lg:py-3 px-3">*/}
+                            {/*    <PopoverGroup className="hidden lg:flex lg:gap-x-12">*/}
+                            {/*        <Popover className="relative">*/}
+                            {/*            <PopoverButton*/}
+                            {/*                className="flex items-center text-white hover:text-[#FFA726] gap-x-1 text-sm font-semibold leading-6 outline-none">*/}
+                            {/*                Thương hiệu*/}
+                            {/*                <ChevronDownIcon aria-hidden="true"*/}
+                            {/*                                 className="h-5 w-5 flex-none text-gray-400"/>*/}
+                            {/*            </PopoverButton>*/}
 
-                                        <PopoverPanel
-                                            transition-all duration-200 ease-out
-                                            className="absolute -left-8 top-full z-10 mt-3 w-[10.5rem] max-w-md overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"
-                                        >
-                                            <div className="p-4">
-                                                {brands.map((item) => (
-                                                    <div
-                                                        key={item.name}
-                                                        className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50"
-                                                    >
-                                                        <div className="flex-auto">
-                                                            <Link to={item.href}
-                                                                  className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">
-                                                                {item.name}
-                                                            </Link>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </PopoverPanel>
-                                    </Popover>
-                                </PopoverGroup>
-                            </li>
+                            {/*            <PopoverPanel*/}
+                            {/*                transition-all duration-200 ease-out*/}
+                            {/*                className="absolute -left-8 top-full z-10 mt-3 w-[10.5rem] max-w-md overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"*/}
+                            {/*            >*/}
+                            {/*                <div className="p-4">*/}
+                            {/*                    {brands.map((item) => (*/}
+                            {/*                        <div*/}
+                            {/*                            key={item.name}*/}
+                            {/*                            className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50"*/}
+                            {/*                        >*/}
+                            {/*                            <div className="flex-auto">*/}
+                            {/*                                <Link to={item.href}*/}
+                            {/*                                      className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">*/}
+                            {/*                                    {item.name}*/}
+                            {/*                                </Link>*/}
+                            {/*                            </div>*/}
+                            {/*                        </div>*/}
+                            {/*                    ))}*/}
+                            {/*                </div>*/}
+                            {/*            </PopoverPanel>*/}
+                            {/*        </Popover>*/}
+                            {/*    </PopoverGroup>*/}
+                            {/*</li>*/}
                             <li className="max-lg:border-b max-lg:py-3 px-3">
                                 <Link to="/contact-us"
                                       className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">
@@ -218,12 +211,14 @@ const Header = () => {
                                 <FontAwesomeIcon icon={faHeart} color={"#FFA726"}/>
                             </CustomTooltip>
                         </Link>
-                        <Link to={"/cart"} className="flex items-center space-x-1">
+                        <div className="relative flex items-center space-x-1" onMouseEnter={() => setShowMiniCart(true)}
+                             onMouseLeave={() => setShowMiniCart(false)}>
                             <CustomTooltip title="Giỏ hàng">
                                 <FontAwesomeIcon icon={faCartShopping} color={"#FFA726"}/>
                             </CustomTooltip>
+                            {showMiniCart && <MiniCart />}
                             <span className="font-bold text-[#FFA726] py-1">{cart?.quantity || 0}</span>
-                        </Link>
+                        </div>
                         {isLoggedIn ? (
                             <PopoverGroup className="hidden lg:flex lg:gap-x-12">
                                 <Popover className="relative">
