@@ -30,7 +30,7 @@ const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
 }));
 
 const accounts = [
-    {option: "Thông tin tài khoản", href: "/information-account", icon: faCircleInfo},
+    {option: "Thông tin tài khoản", href: "/personal", icon: faCircleInfo},
     {option: "Đơn hàng của tôi", href: "/my-order", icon: faBagShopping},
     {option: "Đăng xuất", href: "", icon: faArrowRightFromBracket},
 ]
@@ -45,6 +45,7 @@ const Header = () => {
         const {cart} = useSelector((state: RootState) => state.cart)
         const [lastScrollY, setLastScrollY] = useState(0);
         const [showMiniCart, setShowMiniCart] = useState(false);
+        const wishlistProducts = useSelector((state: RootState) => state.wishList.items);
 
         const handleScroll = () => {
             if (typeof window !== 'undefined') {
@@ -157,39 +158,6 @@ const Header = () => {
                                 </Link>
 
                             </li>
-                            {/*<li className="max-lg:border-b max-lg:py-3 px-3">*/}
-                            {/*    <PopoverGroup className="hidden lg:flex lg:gap-x-12">*/}
-                            {/*        <Popover className="relative">*/}
-                            {/*            <PopoverButton*/}
-                            {/*                className="flex items-center text-white hover:text-[#FFA726] gap-x-1 text-sm font-semibold leading-6 outline-none">*/}
-                            {/*                Thương hiệu*/}
-                            {/*                <ChevronDownIcon aria-hidden="true"*/}
-                            {/*                                 className="h-5 w-5 flex-none text-gray-400"/>*/}
-                            {/*            </PopoverButton>*/}
-
-                            {/*            <PopoverPanel*/}
-                            {/*                transition-all duration-200 ease-out*/}
-                            {/*                className="absolute -left-8 top-full z-10 mt-3 w-[10.5rem] max-w-md overflow-hidden rounded-2xl bg-white shadow-lg ring-1 ring-gray-900/5 transition data-[closed]:translate-y-1 data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-150 data-[enter]:ease-out data-[leave]:ease-in"*/}
-                            {/*            >*/}
-                            {/*                <div className="p-4">*/}
-                            {/*                    {brands.map((item) => (*/}
-                            {/*                        <div*/}
-                            {/*                            key={item.name}*/}
-                            {/*                            className="group relative flex items-center gap-x-6 rounded-lg px-4 py-2 text-sm leading-6 hover:bg-gray-50"*/}
-                            {/*                        >*/}
-                            {/*                            <div className="flex-auto">*/}
-                            {/*                                <Link to={item.href}*/}
-                            {/*                                      className="block font-semibold text-gray-900 group-hover:text-[#FFA726]">*/}
-                            {/*                                    {item.name}*/}
-                            {/*                                </Link>*/}
-                            {/*                            </div>*/}
-                            {/*                        </div>*/}
-                            {/*                    ))}*/}
-                            {/*                </div>*/}
-                            {/*            </PopoverPanel>*/}
-                            {/*        </Popover>*/}
-                            {/*    </PopoverGroup>*/}
-                            {/*</li>*/}
                             <li className="max-lg:border-b max-lg:py-3 px-3">
                                 <Link to="/contact-us"
                                       className="hover:text-[#FFA726] text-white block font-semibold text-[15px]">
@@ -210,6 +178,7 @@ const Header = () => {
                             <CustomTooltip title="Yêu thích">
                                 <FontAwesomeIcon icon={faHeart} color={"#FFA726"}/>
                             </CustomTooltip>
+                            <span className="font-bold text-[#FFA726] py-1 ml-1">{wishlistProducts.length || 0}</span>
                         </Link>
                         <div className="relative flex items-center space-x-1" onMouseEnter={() => setShowMiniCart(true)}
                              onMouseLeave={() => setShowMiniCart(false)}>

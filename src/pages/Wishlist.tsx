@@ -1,16 +1,26 @@
-import { useEffect } from "react";
+import {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import HerobarWishlist from "../components/HerobarWishlist.tsx";
 import ProductCard from "../components/ProductCard.tsx";
 import {fetchWishlist} from "../store/wishlist.slice.ts";
 import type { AppDispatch, RootState } from "../store/store.ts";
+import Pagination from "../components/Pagination.tsx";
 
 const useAppDispatch: () => AppDispatch = useDispatch;
 
 function Wishlist() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
     const dispatch = useAppDispatch();
     const wishlistProducts = useSelector((state: RootState) => state.wishList.items);
-
+    const totalPages: number = wishlistProducts ? Math.ceil(wishlistProducts.length / itemsPerPage) : 1;
+    const displayedProducts = wishlistProducts.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+    const handlePageChange = (page: number): void => {
+        setCurrentPage(page);
+    };
     function scrollTop(){
         window.scrollTo(0,0);
     }
@@ -35,7 +45,7 @@ function Wishlist() {
                 </div>
                 <section aria-labelledby="products-heading" className="pb-24 pt-6 flex justify-center">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-32 max-w-5xl mx-auto">
-                        {wishlistProducts.map((product) => (
+                        {displayedProducts.map((product) => (
                             <ProductCard
                                 key={product.id}
                                 img={product.images[0].imageUrl}
@@ -48,6 +58,13 @@ function Wishlist() {
                     </div>
                 </section>
             </section>
+            <div className={"mb-6"}>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+            </div>
         </div>
     );
 }

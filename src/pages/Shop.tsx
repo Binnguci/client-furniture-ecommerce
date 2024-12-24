@@ -8,7 +8,7 @@ import {Product} from "../types/product.type.ts";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../store/store.ts";
 import {fetchWishlist} from "../store/wishlist.slice.ts";
-import {fetchProducts, searchProducts} from "../store/product.slice.ts";
+import {fetchProducts} from "../store/product.slice.ts";
 
 const sortOptions = [
     {name: 'Sản phẩm mới', href: '#', current: false},
@@ -73,28 +73,10 @@ function Shop() {
     const wishlist: Product[] = useSelector((state: RootState): Product[] => state.wishList.items);
     const dispatch = useAppDispatch();
     const products:Product[] = useSelector((state: RootState) => state.product.products);
-    const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
 
     function scrollTop() {
         window.scrollTo(0, 0);
     }
-    const handleFilterChange = (sectionId: string, value: string, checked: boolean) => {
-        setSelectedFilters((prevFilters) => {
-            const sectionFilters = prevFilters[sectionId] || [];
-
-            if (checked) {
-                return {
-                    ...prevFilters,
-                    [sectionId]: [...sectionFilters, value],
-                };
-            } else {
-                return {
-                    ...prevFilters,
-                    [sectionId]: sectionFilters.filter((item) => item !== value),
-                };
-            }
-        });
-    };
 
 
     useEffect(() => {
@@ -105,9 +87,7 @@ function Shop() {
         if (products.length === 0){
             dispatch(fetchProducts())
         }
-        console.log("Filters Updated:", selectedFilters);
-        dispatch(searchProducts({ filters: selectedFilters }));
-    }, [selectedFilters, dispatch]);
+    }, [dispatch]);
 
 
     const totalPages: number = products ? Math.ceil(products.length / itemsPerPage) : 1;
@@ -188,7 +168,6 @@ function Shop() {
                                                                     defaultChecked={option.checked}
                                                                     id={`filter-${section.id}-${optionIdx}`}
                                                                     name={`${section.id}[]`}
-                                                                    onChange={(e) => handleFilterChange(section.id, option.value, e.target.checked)}
                                                                     type="checkbox"
                                                                     className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-[#FFA726] checked:bg-[#FFA726]"
                                                                 />

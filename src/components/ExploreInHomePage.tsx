@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import imggrid1 from "../assets/img/img-grid-1.jpg";
 import imggrid2 from "../assets/img/img-grid-2.jpg";
 import imggrid3 from "../assets/img/img-grid-3.jpg";
@@ -50,9 +51,9 @@ function ExploreInHomePage() {
                             </li>
                         </ul>
                         <p>
-                            <a href="#"
+                            <Link to={`/products`}
                                className="btn bg-[#FFA726] text-black hover:text-[#FFA726] hover:bg-black px-4 py-2 rounded font-bold transition-colors duration-300">Khám
-                                phá</a>
+                                phá</Link>
                         </p>
                     </div>
                 </div>

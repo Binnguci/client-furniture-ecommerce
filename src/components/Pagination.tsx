@@ -16,7 +16,7 @@ function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
                 disabled={currentPage === 1}
                 onClick={(): void => onPageChange(currentPage - 1)}
             >
-                Previous
+                Trang đầu
             </button>
             {pages.map((page: number) => (
                 <button
@@ -40,7 +40,7 @@ function Pagination({currentPage, totalPages, onPageChange}: PaginationProps) {
                 disabled={currentPage === totalPages}
                 onClick={(): void => onPageChange(currentPage + 1)}
             >
-                Next
+                Trang cuối
             </button>
         </div>
     );
