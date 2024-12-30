@@ -5,6 +5,7 @@ import authReducer from './auth.slice.ts';
 import reviewReducer from './review.slice.ts';
 import productReducer from './product.slice.ts';
 import userReducer from './user.slice.ts';
+import checkoutReducer from './checkout.slice.ts';
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 
 export const store = configureStore({
@@ -15,7 +16,7 @@ export const store = configureStore({
         review: reviewReducer,
         product: productReducer,
         user: userReducer,
-
+        checkout:checkoutReducer,
     }
 })
 export type RootState = ReturnType<typeof store.getState>

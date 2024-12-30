@@ -22,25 +22,15 @@ export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: st
     }
 );
 
-export const searchProducts = createAsyncThunk<Product[], Record<string, unknown>, { rejectValue: string }>(
+export const searchProducts = createAsyncThunk<Product[], string, { rejectValue: string }>(
     'products/searchProducts',
-    async (searchParams, { rejectWithValue }) => {
+    async (queryString, { rejectWithValue }) => {
         try {
-            const cleanParams = Object.fromEntries(
-                Object.entries(searchParams).filter(([_, value]) => value !== undefined && value !== null)
-            );
-
-            const response = await http.get('/product/search', {
-                params: cleanParams,
-                paramsSerializer: (params) => {
-                    return new URLSearchParams(params).toString();
-                }
-            });
-
+            const response = await http.get(`/product/search?${queryString}`);
             return response.data.result;
         } catch (error) {
             const err = error as AxiosError;
-            return rejectWithValue(err.response?.data as string || "Failed to search products");
+            return rejectWithValue(err.response?.data as string || 'Failed to search products');
         }
     }
 );
@@ -57,7 +47,11 @@ const initialState: ProductState = {
 const productSlice = createSlice({
     name: 'products',
     initialState,
-    reducers: {},
+    reducers: {
+        resetProducts: (state) => {
+            state.products = [];
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchProducts.pending, (state) => {
@@ -89,4 +83,5 @@ const productSlice = createSlice({
     },
 });
 
+export const { resetProducts } = productSlice.actions;
 export default productSlice.reducer;

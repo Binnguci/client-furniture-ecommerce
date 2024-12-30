@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { FaTruck, FaPaypal } from 'react-icons/fa';
+import {useDispatch} from "react-redux";
+import {setPayment} from "../store/checkout.slice.ts";
 
 interface PaymentMethodType {
     id: string;
@@ -10,7 +12,7 @@ interface PaymentMethodType {
 
 const PaymentMethod = () => {
     const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
-
+    const dispatch = useDispatch();
     const paymentMethods: PaymentMethodType[] = [
         {
             id: "cod",
@@ -25,7 +27,10 @@ const PaymentMethod = () => {
             icon: <FaPaypal className="text-2xl text-[#003087]" />,
         },
     ];
-
+const handleMethodChange = (id: string) => {
+    dispatch(setPayment(id));
+    setSelectedMethod(id)
+}
     return (
         <div className="space-y-4">
             <h2 className="font-bold text-2xl text-[#FFA726] mb-6">Hình thức thanh toán</h2>
@@ -42,7 +47,7 @@ const PaymentMethod = () => {
                             name="payment"
                             value={method.id}
                             checked={selectedMethod === method.id}
-                            onChange={() => setSelectedMethod(method.id)}
+                            onChange={() => handleMethodChange(method.id)}
                             className="mr-4 accent-[#FFA726]"
                         />
                         <div className="mr-4">{method.icon}</div>

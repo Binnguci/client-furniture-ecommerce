@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {faLock} from "@fortawesome/free-solid-svg-icons/faLock";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartShopping, faEdit, faRightFromBracket, faUser} from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +17,13 @@ export function Personal() {
     const {user} = useSelector((state: RootState) => state.auth);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    function scrollTop(){
+        window.scrollTo(0, 0);
+    }
+
+    useEffect(() => {
+        scrollTop();
+    }, []);
     const renderContent = () => {
         switch (activeTab) {
             case 'info':

@@ -1,6 +1,5 @@
 import HeroBarAboutUs from "../components/HeroBarAboutUs.tsx";
 import WhyChooseUs from "../components/WhyChooseUs.tsx";
-/*import {AnimatedTestimonials} from "../components/ui/animated-testimonials.tsx";*/
 import binnguci from "../assets/img/avtbinnguci.jpg";
 import binnguci2 from "../assets/img/binnguci2.jpeg";
 import binnguci3 from "../assets/img/binnguci3.jpeg"

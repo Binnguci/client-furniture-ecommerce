@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import HeroBarShop from "../components/HerobarShop.tsx";
 import ProductCard from "../components/ProductCard.tsx";
 import Pagination from "../components/Pagination.tsx";
@@ -8,8 +8,7 @@ import {Product} from "../types/product.type.ts";
 import {useSelector} from "react-redux";
 import {RootState, useAppDispatch} from "../store/store.ts";
 import {fetchWishlist} from "../store/wishlist.slice.ts";
-import {fetchProducts, searchProducts} from "../store/product.slice.ts";
-import {debounce} from "@mui/material";
+import {fetchProducts} from "../store/product.slice.ts";
 
 const sortOptions = [
     {name: 'Sản phẩm mới', href: '#', current: false},
@@ -73,15 +72,7 @@ function Shop() {
     const itemsPerPage = 9;
     const wishlist: Product[] = useSelector((state: RootState): Product[] => state.wishList.items);
     const dispatch = useAppDispatch();
-    const products: Product[] = useSelector((state: RootState) => state.product.products);
-    const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>({});
-
-    const handleFilterChange = (sectionId: string, value: string) => {
-        setSelectedFilters((prevFilters) => ({
-            ...prevFilters,
-            [sectionId]: value,
-        }));
-    };
+    const products:Product[] = useSelector((state: RootState) => state.product.products);
 
     function scrollTop() {
         window.scrollTo(0, 0);
@@ -89,30 +80,15 @@ function Shop() {
 
 
     useEffect(() => {
-        scrollTop()
+        scrollTop();
         if (wishlist.length === 0) {
             dispatch(fetchWishlist());
         }
-        if (products.length === 0) {
+        if (products.length === 0){
             dispatch(fetchProducts())
         }
+    }, [dispatch]);
 
-        const queryString = new URLSearchParams(selectedFilters).toString();
-        if (Object.keys(selectedFilters).length === 0) {
-            if (products.length < 0) {
-                dispatch(fetchProducts());
-            }
-        } else {
-            handleSearch(queryString)
-        }
-    }, [dispatch, selectedFilters, wishlist]);
-
-    const handleSearch = useCallback(
-        debounce((queryString: string) => {
-            dispatch(searchProducts(queryString));
-        }, 300),
-        [dispatch]  // Chỉ tạo lại handleSearch khi dispatch thay đổi
-    );
 
     const totalPages: number = products ? Math.ceil(products.length / itemsPerPage) : 1;
 
@@ -177,8 +153,8 @@ function Shop() {
                                                 className="group flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
                                                 <span className="font-medium text-black">{section.name}</span>
                                                 <span className="ml-6 flex items-center">
-                                <MinusIcon aria-hidden="true" className="size-5 text-black"/>
-                            </span>
+            <MinusIcon aria-hidden="true" className="size-5 text-black"/>
+          </span>
                                             </div>
                                         </h3>
                                         <div className="pt-6">
@@ -186,19 +162,39 @@ function Shop() {
                                                 {section.options.map((option, optionIdx) => (
                                                     <div key={option.value} className="flex gap-3">
                                                         <div className="flex h-5 shrink-0 items-center">
-                                                            <input
-                                                                id={`filter-${section.id}-${optionIdx}`}
-                                                                name={`${section.id}[]`}
-                                                                type="checkbox"
-                                                                // checked={selectedFilters[section.id] === option.value}
-                                                                onChange={() => handleFilterChange(section.id, option.value)}
-                                                                className="col-start-1 row-start-1 rounded border border-gray-300 bg-white checked:!border-[#FFA726] checked:!bg-[#FFA726]"
-                                                            />
+                                                            <div className="group grid size-4 grid-cols-1">
+                                                                <input
+                                                                    defaultValue={option.value}
+                                                                    defaultChecked={option.checked}
+                                                                    id={`filter-${section.id}-${optionIdx}`}
+                                                                    name={`${section.id}[]`}
+                                                                    type="checkbox"
+                                                                    className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-[#FFA726] checked:bg-[#FFA726]"
+                                                                />
+                                                                <svg
+                                                                    fill="none"
+                                                                    viewBox="0 0 14 14"
+                                                                    className="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-[:disabled]:stroke-gray-950/25"
+                                                                >
+                                                                    <path
+                                                                        d="M3 8L6 11L11 3.5"
+                                                                        strokeWidth={2}
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        className="opacity-0 group-has-[:checked]:opacity-100"
+                                                                    />
+                                                                    <path
+                                                                        d="M3 7H11"
+                                                                        strokeWidth={2}
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        className="opacity-0 group-has-[:indeterminate]:opacity-100"
+                                                                    />
+                                                                </svg>
+                                                            </div>
                                                         </div>
-                                                        <label
-                                                            htmlFor={`filter-${section.id}-${optionIdx}`}
-                                                            className="text-sm text-gray-600"
-                                                        >
+                                                        <label htmlFor={`filter-${section.id}-${optionIdx}`}
+                                                               className="text-sm text-gray-600">
                                                             {option.label}
                                                         </label>
                                                     </div>
@@ -210,24 +206,17 @@ function Shop() {
                             </form>
 
                             <div className="lg:col-span-3">
-                                {displayedProducts.length > 0 ? (
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {displayedProducts.map((product, index) => (
-                                            <ProductCard
-                                                key={index}
-                                                img={product.images[0].imageUrl}
-                                                name={product.name}
-                                                price={product.price}
-                                                id={product.id}
-                                            />
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <div className="text-center text-gray-500 py-10">
-                                        <p>😕 Không tìm thấy sản phẩm phù hợp.</p>
-                                        <p>Hãy thử điều chỉnh bộ lọc hoặc tìm kiếm lại!</p>
-                                    </div>
-                                )}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {displayedProducts.map((product, index) => (
+                                        <ProductCard
+                                            key={index}
+                                            img={product.images[0].imageUrl}
+                                            name={product.name}
+                                            price={product.price}
+                                            id={product.id}
+                                        />
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     </section>

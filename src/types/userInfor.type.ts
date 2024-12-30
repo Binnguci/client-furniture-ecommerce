@@ -3,4 +3,5 @@ export type UserInfoProps = {
     email?: string;
     phone?: string;
     fullName?: string;
+    addresses?: string[];
 }

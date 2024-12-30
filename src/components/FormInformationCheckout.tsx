@@ -1,56 +1,49 @@
-import { Form, Input, Select} from "antd";
+import {Form, Input, Select} from "antd";
 import {OrderFormType} from "../types/orderForm.type.ts";
 import {useState, useEffect} from "react";
 import axios from "axios";
 import {RootState} from "../store/store.ts";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {setFormCheckout} from "../store/checkout.slice.ts";
 
-interface AddressItem {
+interface Province {
     id: number;
     name: string;
 }
+
 function FormInformationCheckout() {
     const [form] = Form.useForm();
     const {user} = useSelector((state: RootState) => state.auth);
-    const [provinces, setProvinces] = useState<AddressItem[]>([]);
-    const [districts, setDistricts] = useState<AddressItem[]>([]);
-    const [wards, setWards] = useState<AddressItem[]>([]);
+    const dispatch = useDispatch();
+
+    const [provinces, setProvinces] = useState<Province[]>([]);
+    const [districts, setDistricts] = useState<Province[]>([]);
+    const [wards, setWards] = useState<Province[]>([]);
     const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
     const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
 
-
     useEffect(() => {
-        axios.get("https://api.vnaddress.vn/provinces")
-            .then(response => {
-                setProvinces(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching provinces:", error);
-            });
+        axios.get("https://esgoo.net/api-tinhthanh/1/0.htm")
+            .then(response => setProvinces(response.data.data))
+            .catch(error => console.error("Error fetching provinces:", error));
     }, []);
 
-    const handleProvinceChange = (provinceId : number) => {
+    const handleProvinceChange = (provinceId: number) => {
         setSelectedProvince(provinceId);
-        axios.get(`https://api.vnaddress.vn/districts?province_id=${provinceId}`)
+        axios.get(`https://esgoo.net/api-tinhthanh/2/${provinceId}.htm`)
             .then(response => {
-                setDistricts(response.data);
+                setDistricts(response.data.data);
                 setWards([]);
                 setSelectedDistrict(null);
             })
-            .catch(error => {
-                console.error("Error fetching districts:", error);
-            });
+            .catch(error => console.error("Error fetching districts:", error));
     };
 
     const handleDistrictChange = (districtId: number) => {
         setSelectedDistrict(districtId);
-        axios.get(`https://api.vnaddress.vn/wards?district_id=${districtId}`)
-            .then(response => {
-                setWards(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching wards:", error);
-            });
+        axios.get(`https://esgoo.net/api-tinhthanh/3/${districtId}.htm`)
+            .then(response => setWards(response.data.data))
+            .catch(error => console.error("Error fetching wards:", error));
     };
 
     useEffect(() => {
@@ -62,12 +55,15 @@ function FormInformationCheckout() {
         }
     }, [user, form]);
 
-
     const onFinish = (values: OrderFormType) => {
         console.log("Form Data:", values);
         alert("Form submitted successfully!");
     };
 
+    const handleFormChange = (_: Record<string, unknown>, allValues: Record<string, unknown>) => {
+        dispatch(setFormCheckout(allValues));
+
+    };
 
     return (
         <div className="max-w-2xl mx-auto p-6 bg-gray-50">
@@ -76,6 +72,7 @@ function FormInformationCheckout() {
                 form={form}
                 layout="vertical"
                 onFinish={onFinish}
+                onValuesChange={handleFormChange}
                 className="space-y-4"
             >
                 <div className="flex space-x-4">
@@ -83,9 +80,7 @@ function FormInformationCheckout() {
                         label="Tên người đặt hàng"
                         name="name"
                         className="w-full"
-                        rules={[
-                            {required: true, message: "Tên người đặt hàng là bắt buộc"},
-                        ]}
+                        rules={[{required: true, message: "Tên người đặt hàng là bắt buộc"}]}
                     >
                         <Input placeholder="Tên đầy đủ"/>
                     </Form.Item>
@@ -98,7 +93,7 @@ function FormInformationCheckout() {
                             placeholder="Chọn Tỉnh/Thành Phố"
                             options={provinces.map(province => ({
                                 label: province.name,
-                                value: province.id
+                                value: province.id,
                             }))}
                         />
                     </Form.Item>
@@ -110,7 +105,7 @@ function FormInformationCheckout() {
                             placeholder="Chọn Quận/Huyện"
                             options={districts.map(district => ({
                                 label: district.name,
-                                value: district.id
+                                value: district.id,
                             }))}
                             disabled={!selectedProvince}
                         />
@@ -118,11 +113,10 @@ function FormInformationCheckout() {
 
                     <Form.Item label="Xã/Phường" name="ward">
                         <Select
-                            value={wards}
                             placeholder="Chọn Xã/Phường"
                             options={wards.map(ward => ({
                                 label: ward.name,
-                                value: ward.id
+                                value: ward.id,
                             }))}
                             disabled={!selectedDistrict}
                         />
@@ -134,7 +128,7 @@ function FormInformationCheckout() {
                         name="address"
                         rules={[{required: true, message: "Địa chỉ là bắt buộc"}]}
                     >
-                        <Input placeholder="Ví dụ: 1178 Phạm Thế hiển"/>
+                        <Input placeholder="Ví dụ: 1178 Phạm Thế Hiển"/>
                     </Form.Item>
                 </div>
                 <div className="flex space-x-4">
@@ -150,12 +144,8 @@ function FormInformationCheckout() {
                         <Input placeholder="Số điện thoại"/>
                     </Form.Item>
                 </div>
-
                 <Form.Item label="Ghi chú" name="notes">
-                    <Input.TextArea
-                        rows={4}
-                        placeholder="Ví dụ: Giao trước 10h sáng..."
-                    />
+                    <Input.TextArea rows={4} placeholder="Ví dụ: Giao trước 10h sáng..."/>
                 </Form.Item>
             </Form>
         </div>

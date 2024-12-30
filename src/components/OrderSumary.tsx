@@ -1,10 +1,15 @@
 import {useSelector} from "react-redux";
-import {RootState} from "../store/store";
+import {RootState, useAppDispatch} from "../store/store";
 import {formatCurrencyWithoutSymbol} from "../utils/convertCurrencyToString.ts";
+import {useEffect} from "react";
+import {setOrder} from "../store/checkout.slice.ts";
 
 function OrderSummary() {
     const {cart} = useSelector((state: RootState) => state.cart);
-
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        dispatch(setOrder(cart?.cartItemResponse));
+    }, [dispatch]);
     return (
         <div className="mt-8">
             <h3 className="text-2xl font-bold text-[#FFA726] mb-4">Đơn hàng</h3>
