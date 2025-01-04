@@ -107,11 +107,12 @@ function Shop() {
         }
     }, [dispatch, selectedFilters, wishlist]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleSearch = useCallback(
         debounce((queryString: string) => {
             dispatch(searchProducts(queryString));
         }, 300),
-        [dispatch]  // Chỉ tạo lại handleSearch khi dispatch thay đổi
+        [dispatch]
     );
 
     const totalPages: number = products ? Math.ceil(products.length / itemsPerPage) : 1;

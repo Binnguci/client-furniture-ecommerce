@@ -4,8 +4,8 @@ import binnguci from "../assets/img/avtbinnguci.jpg";
 import binnguci2 from "../assets/img/binnguci2.jpeg";
 import binnguci3 from "../assets/img/binnguci3.jpeg"
 import CarouselAboutUs from "../components/CarouselAboutUs.tsx";
-import {BackgroundGradient} from "../components/ui/background-gradient.tsx";
-import {useEffect} from "react";
+import { BackgroundGradient } from "../components/ui/background-gradient.tsx";
+import { useEffect } from "react";
 
 const testimonials = [
     {
@@ -33,7 +33,7 @@ const testimonials = [
 
 
 function AboutUs() {
-    function scrollTop(){
+    function scrollTop() {
         window.scrollTo(0, 0);
     }
 
@@ -42,8 +42,8 @@ function AboutUs() {
     }, []);
     return (
         <div>
-            <HeroBarAboutUs/>
-            <WhyChooseUs/>
+            <HeroBarAboutUs />
+            <WhyChooseUs />
             <div className="flex justify-center items-center gap-8 my-36">
                 {testimonials.map((item) => (
                     <BackgroundGradient
@@ -60,7 +60,6 @@ function AboutUs() {
                             <p className="text-base sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">
                                 {item.name}
                             </p>
-
                             <p className="text-sm text-neutral-600 dark:text-neutral-400">
                                 {item.position}
                             </p>
@@ -72,7 +71,7 @@ function AboutUs() {
                 ))}
             </div>
 
-            <CarouselAboutUs/>
+            <CarouselAboutUs />
         </div>
     );
 }

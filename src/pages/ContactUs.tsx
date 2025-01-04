@@ -1,5 +1,4 @@
 import GoogleMap from "../components/GoogleMap.tsx";
-import HerobarContact from "../components/HerobarContact.tsx";
 import {Button, Form, Input, Modal} from "antd";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPenNib} from "@fortawesome/free-solid-svg-icons/faPenNib";
@@ -93,8 +92,7 @@ function ContactUs() {
     };
     return (
         <>
-            <HerobarContact/>
-            <section className="" id="contact">
+            <section className="mt-24" id="contact">
                 <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
                     <div className="mb-4">
                         <div className="mb-6 max-w-3xl text-center sm:text-center md:mx-auto md:mb-12">
@@ -152,7 +150,7 @@ function ContactUs() {
                                             }
                                         ]}>
                                         <TextArea name="message" rows={4} placeholder={"Nhập nội dung..."}
-                                                  maxLength={1000} value={form.message} onChange={handleChange}/>
+                                                  maxLength={1000} minLength={20} value={form.message} onChange={handleChange}/>
                                     </Form.Item>
                                     <Form.Item style={{marginBottom: "0px"}}>
                                         <Button variant={"solid"}

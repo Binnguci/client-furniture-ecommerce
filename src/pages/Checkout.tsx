@@ -3,26 +3,35 @@ import PaymentMethod from "../components/PaymentMethod.tsx";
 import OrderSummary from "../components/OrderSumary.tsx";
 import {Button} from "antd";
 import http from "../utils/http.ts";
-import axios from "axios";
 
 function Checkout() {
-    // const checkoutInfo = useSelector((state: RootState) => state.checkout);
-    const sendData = async () => {
+    const sendData = async (): Promise<string> => {
         try {
-            const response = await http.post("/vnpay/payment");
-            console.log('Data sent successfully:', response.data);
-        } catch (error: unknown) {
-            let errorMessage = 'Đã xảy ra lỗi! Kiểm tra lại kết nối internet';
-
-            if (axios.isAxiosError(error)) {
-                errorMessage = error.response?.data?.message || 'Tên đăng nhập hoặc mật khẩu không đúng!';
+            const response = await http.post("/paypal/payment/create");
+            console.log("Response from server:", response.data);
+            const approvalUrl: string = response.data.approvalUrl || response.data.data || "";
+            if (!approvalUrl) {
+                throw new Error("Approval URL not found in the response");
             }
-            console.error('Error sending data:', errorMessage);
+            return approvalUrl;
+        } catch (error) {
+            console.error("Error during payment creation:", error);
+            throw error;
         }
     };
-    const handleCheckout = () => {
-        sendData();
-    }
+
+
+    const handleCheckout = async () => {
+        try {
+            const approvalUrl = await sendData();
+            window.location.href = approvalUrl; // Chuyển hướng đến PayPal Sandbox
+        } catch (error) {
+            console.error("Failed to initiate checkout:", error);
+            alert("Có lỗi xảy ra khi khởi tạo thanh toán. Vui lòng thử lại.");
+        }
+    };
+
+
     return (
         <div className="mt-40 mb-20 px-56">
             <div className="grid grid-cols-2 gap-8">

@@ -2,7 +2,6 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {AxiosError} from "axios";
 import {Cart} from "../types/cart.type";
 import http from "../utils/http.ts";
-
 interface CartState {
     cart: Cart | null;
     status: "idle" | "loading" | "succeeded" | "failed";
@@ -14,14 +13,13 @@ const initialState: CartState = {
     status: "idle",
     error: null,
 };
-
-
 const API_BASE_URL = "user/cart";
 
 export const fetchCart = createAsyncThunk<Cart, void, { rejectValue: string }>(
     "cart/fetchCart",
     async (_, {rejectWithValue}) => {
         try {
+
             const response = await http.get(`${API_BASE_URL}/get-cart`);
             console.log("fetch cart", response.data.result)
             return response.data.result;

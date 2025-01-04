@@ -22,6 +22,8 @@ import {useEffect} from "react";
 import {loadAuthFromStorage} from "./store/authActions.ts";
 import {useAppDispatch} from "./store/store.ts";
 import Checkout from "./pages/Checkout.tsx";
+import PaymentCancel from "./pages/PaymentCancel.tsx";
+import PaymentSuccess from "./pages/PaymentSuccess.tsx";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -45,6 +47,8 @@ function App() {
                         <Route path={"/wishlist"} element={<Wishlist/>}/>
                         <Route path={"/about"} element={<AboutUs/>}/>
                         <Route path={"/payment"} element={<Checkout/>}/>
+                        <Route path={"/payment/cancel"} element={<PaymentCancel/>}/>
+                        <Route path={"/payment/success"} element={<PaymentSuccess/>}/>
                     </Route>
                     <Route element={<WithoutHeaderLayout/>}>
                         <Route path={"/sign-up"} element={<Register/>}/>

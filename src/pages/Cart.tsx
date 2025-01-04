@@ -1,4 +1,4 @@
-import {useEffect} from "react";
+import {useEffect, useMemo} from "react";
 import HeroBarCart from "../components/HeroBarCart.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faTrash} from "@fortawesome/free-solid-svg-icons/faTrash";
@@ -10,7 +10,6 @@ import {
     increaseProductQuantity,
     removeProductFromCart
 } from "../store/cart.slice.ts";
-import {CartItem} from "../types/cartItem.type.ts";
 import {convertCurrencyStringToNumber} from "../utils/convertCurrencyToNumber.ts";
 import {formatCurrencyWithoutSymbol} from "../utils/convertCurrencyToString.ts";
 import {Link} from "react-router-dom";
@@ -33,15 +32,15 @@ function Cart() {
         dispatch(removeProductFromCart({productID: id}));
     };
 
-    function calculateTotal() {
-        const totalPrice: number =
-            cart?.cartItemResponse.reduce(
-                (total, item: CartItem) =>
-                    total + convertCurrencyStringToNumber(item.productDTO.price) * item.quantity,
-                0
-            ) || 0;
-        return formatCurrencyWithoutSymbol(totalPrice);
-    }
+    const totalPrice = useMemo(() => {
+        return (
+            cart?.cartItemResponse.reduce((total, item) => {
+                const price = convertCurrencyStringToNumber(item.productDTO.price) || 0;
+                const quantity = item.quantity || 0;
+                return total + price * quantity;
+            }, 0) || 0
+        );
+    }, [cart]);
 
     const handleIncrease = (id: number): void => {
         dispatch(increaseProductQuantity({productID: id}));
@@ -159,7 +158,7 @@ function Cart() {
                                 <div className="flex justify-between py-4">
                                     <span className="text-black">Tổng</span>
                                     <span className="font-medium text-gray-800">
-                                        {calculateTotal()}
+                                        {formatCurrencyWithoutSymbol(totalPrice)}
                                     </span>
                                 </div>
                                 <Link to={"/payment"}>
