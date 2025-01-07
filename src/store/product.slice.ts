@@ -1,7 +1,7 @@
-import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import http from "../utils/http.ts";
 import {AxiosError} from "axios";
-import { Product } from '../types/product.type.ts';
+import {Product} from '../types/product.type.ts';
 
 interface ProductState {
     products: Product[];
@@ -11,7 +11,7 @@ interface ProductState {
 
 export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: string }>(
     'products/fetchProducts',
-    async (_, { rejectWithValue }) => {
+    async (_, {rejectWithValue}) => {
         try {
             const response = await http.get('/product');
             return response.data.result;
@@ -24,7 +24,7 @@ export const fetchProducts = createAsyncThunk<Product[], void, { rejectValue: st
 
 export const searchProducts = createAsyncThunk<Product[], string, { rejectValue: string }>(
     'products/searchProducts',
-    async (queryString, { rejectWithValue }) => {
+    async (queryString, {rejectWithValue}) => {
         try {
             const response = await http.get(`/product/search?${queryString}`);
             return response.data.result;
@@ -35,7 +35,18 @@ export const searchProducts = createAsyncThunk<Product[], string, { rejectValue:
     }
 );
 
-
+export const updateProducts = createAsyncThunk<Product, Product, { rejectValue: string }>(
+    'products/updateProducts',
+    async (product, {rejectWithValue}) => {
+        try {
+            const response = await http.put(`/product/update`, product);
+            return response.data.result;
+        } catch (error) {
+            const err = error as AxiosError;
+            return rejectWithValue(err.response?.data as string || 'Failed to update product');
+        }
+    }
+);
 
 
 const initialState: ProductState = {
@@ -79,9 +90,26 @@ const productSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || 'Failed to search products';
             });
-
+        builder
+            .addCase(updateProducts.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateProducts.fulfilled, (state, action: PayloadAction<Product>) => {
+                state.loading = false;
+                state.products = state.products.map(product => {
+                    if (product.id === action.payload.id) {
+                        return action.payload;
+                    }
+                    return product;
+                });
+            })
+            .addCase(updateProducts.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || 'Failed to update product';
+            });
     },
 });
 
-export const { resetProducts } = productSlice.actions;
+export const {resetProducts} = productSlice.actions;
 export default productSlice.reducer;

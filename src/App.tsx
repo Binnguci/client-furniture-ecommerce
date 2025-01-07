@@ -18,12 +18,14 @@ import Shop from "./pages/Shop.tsx";
 import Wishlist from "./pages/Wishlist.tsx";
 import AboutUs from "./pages/AboutUs.tsx";
 import WithoutHeaderLayout from "./layout/WithoutHeaderLayout.tsx";
-import {useEffect} from "react";
 import {loadAuthFromStorage} from "./store/authActions.ts";
 import {useAppDispatch} from "./store/store.ts";
 import Checkout from "./pages/Checkout.tsx";
 import PaymentCancel from "./pages/PaymentCancel.tsx";
 import PaymentSuccess from "./pages/PaymentSuccess.tsx";
+import { Dashboard } from './pages/admin/Dashboard.tsx';
+import AdminLayout from "./layout/AdminLayout.tsx";
+import {useEffect} from "react";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -49,7 +51,7 @@ function App() {
                         <Route path={"/payment"} element={<Checkout/>}/>
                         <Route path={"/payment/cancel"} element={<PaymentCancel/>}/>
                         <Route path={"/payment/success"} element={<PaymentSuccess/>}/>
-                    </Route>
+                     </Route>
                     <Route element={<WithoutHeaderLayout/>}>
                         <Route path={"/sign-up"} element={<Register/>}/>
                         <Route path={"/verify-otp"} element={<OTPVerify/>}/>
@@ -58,6 +60,9 @@ function App() {
                         <Route path={"/change-password"} element={<ChangePassword/>}/>
                         <Route path="/wait-verify" element={<WaitVerifyAccount/>}/>
                         <Route path="*" element={<PageNotFound/>}/>
+                    </Route>
+                    <Route element={<AdminLayout/>}>
+                        <Route path={"/admin/dashboard"} element={<Dashboard/>}/>
                     </Route>
                 </Routes>
             </div>

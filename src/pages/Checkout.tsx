@@ -5,15 +5,19 @@ import {Button} from "antd";
 import http from "../utils/http.ts";
 
 function Checkout() {
+
     const sendData = async (): Promise<string> => {
         try {
-            const response = await http.post("/paypal/payment/create");
+            const response = await http.post("/payment/checkout");
             console.log("Response from server:", response.data);
-            const approvalUrl: string = response.data.approvalUrl || response.data.data || "";
-            if (!approvalUrl) {
+
+            const urlPayment: string = response.data?.result?.urlPayment || "";
+            console.log("Payment URL:", urlPayment);
+
+            if (!urlPayment) {
                 throw new Error("Approval URL not found in the response");
             }
-            return approvalUrl;
+            return urlPayment;
         } catch (error) {
             console.error("Error during payment creation:", error);
             throw error;
@@ -24,12 +28,14 @@ function Checkout() {
     const handleCheckout = async () => {
         try {
             const approvalUrl = await sendData();
-            window.location.href = approvalUrl; // Chuyển hướng đến PayPal Sandbox
+            window.location.href = approvalUrl;
         } catch (error) {
             console.error("Failed to initiate checkout:", error);
             alert("Có lỗi xảy ra khi khởi tạo thanh toán. Vui lòng thử lại.");
         }
+
     };
+
 
 
     return (
@@ -45,8 +51,7 @@ function Checkout() {
                         <Button
                             htmlType="button"
                             onClick={handleCheckout}
-                            className="!bg-[#FFA726] !text-black font-bold w-full hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0"
-                        >
+                            className="!bg-[#FFA726] !text-black font-bold w-full hover:!bg-black hover:!text-[#FFA726] transition-colors duration-300 border-0 hover:outline-none hover:border-0">
                             Xác nhận thanh toán
                         </Button>
                     </div>

@@ -28,7 +28,7 @@ function WaitVerifyAccount() {
         return () => clearInterval(intervalId);
     }, [navigate]);
     return (
-        <main className="relative min-h-screen flex flex-col justify-center bg-slate-50 overflow-hidden">
+        <main className="relative min-h-screen flex flex-col justify-center overflow-hidden">
             <Link to={"/"} className="absolute top-4 left-4">
                 <LogoVertical/>
             </Link>

@@ -16,6 +16,7 @@ import {RootState, useAppDispatch} from "../store/store.ts";
 import {logout} from "../store/authActions.ts";
 import {fetchCart} from "../store/cart.slice.ts";
 import MiniCart from "./MiniCart.tsx";
+import { selectIsLoggedIn } from "../store/auth.slice.ts";
 
 const CustomTooltip = styled(({className, ...props}: TooltipProps) => (
     <Tooltip {...props} classes={{popper: className}}/>
@@ -36,8 +37,9 @@ const accounts = [
 ]
 const Header = () => {
         const [isMenuOpen, setMenuOpen] = useState(false);
-        const [isLoggedIn, setIsLoggedIn] = useState(false);
-        const navigate = useNavigate();
+    const isLoggedIn = useSelector(selectIsLoggedIn);
+
+    const navigate = useNavigate();
         const [isVisible, setIsVisible] = useState(true);
         const header = useRef(null);
         const user = useSelector((state: RootState) => state.auth.user);
@@ -60,8 +62,6 @@ const Header = () => {
 
 
         useEffect(() => {
-            const token = localStorage.getItem('accessToken');
-            setIsLoggedIn(!!token);
             if (cart == null) {
                 dispatch(fetchCart())
             }
@@ -81,7 +81,7 @@ const Header = () => {
 
         const handleOnClick = async (option: string) => {
             if (option === "Đăng xuất") {
-                try {
+                    try {
                     const token = localStorage.getItem('accessToken');
                     if (!token) {
                         console.error('Không tìm thấy token trong localStorage');
@@ -89,7 +89,6 @@ const Header = () => {
                     }
                     const response = await http.post("/auth/logout", {token});
                     dispatch(logout());
-                    setIsLoggedIn(false);
                     console.log('Đăng xuất thành công:', response.data);
                     navigate("/");
                 } catch (error: unknown) {

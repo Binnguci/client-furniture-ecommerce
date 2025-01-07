@@ -105,7 +105,7 @@ function Shop() {
         } else {
             handleSearch(queryString)
         }
-    }, [dispatch, selectedFilters, wishlist]);
+    }, [dispatch, selectedFilters]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleSearch = useCallback(
