@@ -2,20 +2,15 @@ import {useEffect, useState} from 'react';
 import {faLock} from "@fortawesome/free-solid-svg-icons/faLock";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCartShopping, faEdit, faRightFromBracket, faUser} from "@fortawesome/free-solid-svg-icons";
-import {useSelector} from "react-redux";
 import binnguci from "../../assets/img/avtbinnguci.jpg"
-import {RootState, useAppDispatch} from "../../store/store.ts";
-import {UserInfoForm} from "../../components/UserInfor.tsx";
 import {useNavigate} from "react-router-dom";
 import http from "../../utils/http.ts";
-import {logout} from "../../store/authActions.ts";
 import axios from "axios";
 import ManagementProduct from "../../components/ManagementProduct.tsx";
+import ManagementClient from "../../components/ManagementClient.tsx";
 
 export function Dashboard() {
     const [activeTab, setActiveTab] = useState<'staff' | 'account' | 'product' | 'logout' | 'order'>('account');
-    const {user} = useSelector((state: RootState) => state.auth);
-    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     function scrollTop(){
         window.scrollTo(0, 0);
@@ -27,14 +22,7 @@ export function Dashboard() {
     const renderContent = () => {
         switch (activeTab) {
             case 'account':
-                return (
-                    <UserInfoForm
-                        username={user.username || ""}
-                        email={user.email || ""}
-                        phone={user.phone || ""}
-                        fullName={user.fullName || ""}
-                    />
-                );
+                return (<ManagementClient/>);
             case 'staff':
                 return <div>Lịch sử mua hàng</div>;
             case 'product':
@@ -54,7 +42,6 @@ export function Dashboard() {
                 return;
             }
             const response = await http.post("/auth/logout", {token});
-            dispatch(logout());
             console.log('Đăng xuất thành công:', response.data);
             navigate("/");
         } catch (error: unknown) {
