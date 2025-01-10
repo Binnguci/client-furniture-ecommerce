@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
-import {faLock} from "@fortawesome/free-solid-svg-icons/faLock";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCartShopping, faEdit, faRightFromBracket, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faBox, faEdit, faFile, faRightFromBracket, faUser} from "@fortawesome/free-solid-svg-icons";
 import binnguci from "../../assets/img/avtbinnguci.jpg"
 import {useNavigate} from "react-router-dom";
 import http from "../../utils/http.ts";
@@ -67,7 +66,7 @@ export function Dashboard() {
                             <FontAwesomeIcon icon={faEdit}/>
                         </button>
                     </div>
-                    <p className="mt-2 font-bold text-lg">Quản lý tài khoản</p>
+                    <p className="mt-2 font-bold text-lg">Quản trị viên</p>
                 </div>
                 <ul className="space-y-4">
                     <li>
@@ -79,19 +78,7 @@ export function Dashboard() {
                                     : 'hover:bg-[#FFA726] hover:text-black'
                             }`}
                         >
-                            <FontAwesomeIcon icon={faUser}/>Quản lý người dùng
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            onClick={() => setActiveTab('staff')}
-                            className={`w-full text-left p-2 rounded ${
-                                activeTab === 'staff'
-                                    ? 'bg-[#FFA726] text-black'
-                                    : 'hover:bg-[#FFA726] hover:text-black'
-                            }`}
-                        >
-                            <FontAwesomeIcon icon={faCartShopping}/> Quản lý nhân viên
+                            <FontAwesomeIcon icon={faUser}/>Quản lý tài khoản
                         </button>
                     </li>
                     <li>
@@ -103,7 +90,7 @@ export function Dashboard() {
                                     : 'hover:bg-[#FFA726] hover:text-black'
                             }`}
                         >
-                            <FontAwesomeIcon icon={faLock}/> Quản lý sản phẩm
+                            <FontAwesomeIcon icon={faBox}/> Quản lý sản phẩm
                         </button>
                     </li>
                     <li>
@@ -115,7 +102,7 @@ export function Dashboard() {
                                     : 'hover:bg-[#FFA726] hover:text-black'
                             }`}
                         >
-                            <FontAwesomeIcon icon={faLock}/> Quản lý đơn hàng
+                            <FontAwesomeIcon icon={faFile} /> Quản lý đơn hàng
                         </button>
                     </li>
                     <li>

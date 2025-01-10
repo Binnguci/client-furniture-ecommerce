@@ -1,4 +1,4 @@
-export interface ProductUpdate {
+export interface ProductRequest {
     id: number;
     name: string;
     categoryID: number;
