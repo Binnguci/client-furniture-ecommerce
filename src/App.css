@@ -1,42 +1,91 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    overflow-y: scroll; /* Bật cuộn dọc nhưng ẩn thanh cuộn */
+    scrollbar-width: none; /* Đối với Firefox */
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body::-webkit-scrollbar {
+    display: none; /* Đối với Chrome, Safari và Edge */
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.we-help-section {
+    padding: 7rem 0 0 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.we-help-section .imgs-grid {
+    display: grid;
+    grid-template-columns: repeat(27, 1fr);
+    position: relative;
 }
 
-.card {
-  padding: 2em;
+.we-help-section .imgs-grid:before {
+    position: absolute;
+    content: "";
+    width: 255px;
+    height: 217px;
+    background-image: url("../src/assets/img/dots-green.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: translate(-40%, -40%);
+    z-index: -1;
 }
 
-.read-the-docs {
-  color: #888;
+.we-help-section .imgs-grid .grid {
+    position: relative;
 }
+
+.we-help-section .imgs-grid .grid img {
+    border-radius: 20px;
+    max-width: 100%;
+}
+
+.we-help-section .imgs-grid .grid-1 {
+    grid-column: 1 / span 18;
+    grid-row: 1 / span 27;
+}
+
+.we-help-section .imgs-grid .grid-2 {
+    grid-column: 19 / span 9;
+    grid-row: 1 / span 5;
+    padding-left: 20px;
+}
+
+.we-help-section .imgs-grid .grid-3 {
+    grid-column: 14 / span 16;
+    grid-row: 6 / span 27;
+    padding-top: 20px;
+}
+
+.custom-steps .ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #FFA726 !important; /* Cam sáng cho bước đã hoàn thành */
+    color: white !important; /* Văn bản trắng */
+    border-color: #FFA726 !important;
+}
+
+.custom-steps .ant-steps-item-process .ant-steps-item-icon {
+    background-color: #FFA726 !important; /* Cam sáng cho bước hiện tại */
+    color: white !important; /* Văn bản trắng */
+    border-color: #FFA726 !important;
+}
+
+.custom-steps .ant-steps-item-process .ant-steps-item-title {
+    color: black !important; /* Tiêu đề bước hiện tại là màu đen */
+    font-weight: bold; /* Làm nổi bật tiêu đề */
+}
+
+.custom-steps .ant-steps-item-wait .ant-steps-item-icon {
+    background-color: white !important; /* Bước chờ giữ nền trắng */
+    color: black; /* Biểu tượng đen */
+    border-color: #FFA726 !important; /* Viền cam sáng */
+}
+
+.custom-steps .ant-steps-item-wait .ant-steps-item-title {
+    color: black !important; /* Tiêu đề màu đen */
+    opacity: 0.7; /* Làm mờ nhẹ để ít nổi bật hơn */
+}
+
+

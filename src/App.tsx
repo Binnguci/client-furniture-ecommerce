@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Register from "./pages/Register.tsx";
+import SignIn from "./pages/SignIn.tsx";
+import OTPVerify from "./pages/OTPVerify.tsx";
+import Home from "./pages/Home.tsx";
+import MainLayout from "./layout/MainLayout.tsx";
+import {Personal} from "./pages/Personal.tsx";
+import ForgotPassword from "./pages/ForgotPassword.tsx";
+import ChangePassword from "./pages/ChangePassword.tsx";
+import PageNotFound from "./pages/PageNotFound.tsx";
+import ContactUs from "./pages/ContactUs.tsx";
+import FAQ from "./pages/FAQ.tsx";
+import DetailProduct from "./pages/DetailProduct.tsx";
+import WaitVerifyAccount from "./pages/WaitVerifyAccount.tsx";
+import Cart from "./pages/Cart.tsx";
+import Shop from "./pages/Shop.tsx";
+import Wishlist from "./pages/Wishlist.tsx";
+import AboutUs from "./pages/AboutUs.tsx";
+import WithoutHeaderLayout from "./layout/WithoutHeaderLayout.tsx";
+import {loadAuthFromStorage} from "./store/authActions.ts";
+import {useAppDispatch} from "./store/store.ts";
+import Checkout from "./pages/Checkout.tsx";
+import PaymentCancel from "./pages/PaymentCancel.tsx";
+import PaymentSuccess from "./pages/PaymentSuccess.tsx";
+import { Dashboard } from './pages/admin/Dashboard.tsx';
+import AdminLayout from "./layout/AdminLayout.tsx";
+import {useEffect} from "react";
 
 function App() {
-  const [count, setCount] = useState(0)
+    const dispatch = useAppDispatch();
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        dispatch(loadAuthFromStorage());
+    }, [dispatch]);
+    return (
+        <BrowserRouter>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<MainLayout/>}>
+                        <Route index element={<Home/>}/>
+                        <Route path={"/user-info"} element={<Personal/>}/>
+                        <Route path={"/contact-us"} element={<ContactUs/>}/>
+                        <Route path={"/faqs"} element={<FAQ/>}/>
+                        <Route path={"/product/:id"} element={<DetailProduct/>}/>
+                        <Route path={"/products"} element={<Shop/>}/>
+                        <Route path={"/personal"} element={<Personal/>}/>
+                        <Route path={"/cart"} element={<Cart/>}/>
+                        <Route path={"/wishlist"} element={<Wishlist/>}/>
+                        <Route path={"/about"} element={<AboutUs/>}/>
+                        <Route path={"/payment"} element={<Checkout/>}/>
+                        <Route path={"/payment/cancel"} element={<PaymentCancel/>}/>
+                        <Route path={"/payment/success"} element={<PaymentSuccess/>}/>
+                     </Route>
+                    <Route element={<WithoutHeaderLayout/>}>
+                        <Route path={"/sign-up"} element={<Register/>}/>
+                        <Route path={"/verify-otp"} element={<OTPVerify/>}/>
+                        <Route path={"/sign-in"} element={<SignIn/>}/>
+                        <Route path={"/forgot-password"} element={<ForgotPassword/>}/>
+                        <Route path={"/change-password"} element={<ChangePassword/>}/>
+                        <Route path="/wait-verify" element={<WaitVerifyAccount/>}/>
+                        <Route path="*" element={<PageNotFound/>}/>
+                    </Route>
+                    <Route element={<AdminLayout/>}>
+                        <Route path={"/admin/dashboard"} element={<Dashboard/>}/>
+                    </Route>
+                </Routes>
+            </div>
+        </BrowserRouter>
+    )
 }
 
 export default App
